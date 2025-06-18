@@ -5,27 +5,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="@dimen/standard_indentation"
     tools:context=".SettingsActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/standard_indentation">
+        android:padding="@dimen/standard_indentation">
 
         <ImageView
             android:id="@+id/img_left_arrow"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginEnd="@dimen/standard_indentation"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_left_arrow" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/big_indentation"
             android:layout_gravity="end"
-            android:layout_marginStart="@dimen/standard_indentation"
             android:fontFamily="@font/ys_display_medium"
             android:text="@string/btn_settings"
             android:textColor="@color/btn_text_color"
@@ -33,104 +31,46 @@
 
     </LinearLayout>
 
-    <FrameLayout
+    <com.google.android.material.switchmaterial.SwitchMaterial
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/standard_indentation">
+        android:layout_marginTop="@dimen/big_indentation"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="@dimen/standard_indentation"
+        android:paddingVertical="@dimen/settings_item_vertical_indentation"
+        android:text="@string/txt_dark_theme"
+        android:textSize="@dimen/other_text_size"
+        app:thumbTint="@color/switch_thumb_selector"
+        app:trackTint="@color/switch_track_selector" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/standard_indentation"
-            android:fontFamily="@font/ys_display_regular"
-            android:text="@string/txt_dark_theme"
-            android:textColor="@color/btn_text_color"
-            android:textSize="@dimen/other_text_size" />
-
-        <Switch
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minWidth="@dimen/min_size_switch"
-            android:minHeight="@dimen/min_size_switch"
-            android:layout_gravity="end"
-            tools:ignore="UseSwitchCompatOrMaterialXml" />
-
-    </FrameLayout>
-
-    <FrameLayout
+    <com.google.android.material.textview.MaterialTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/standard_indentation"
-        android:paddingBottom="@dimen/standard_indentation">
+        android:drawableEnd="@drawable/ic_share"
+        android:paddingHorizontal="@dimen/standard_indentation"
+        android:paddingVertical="@dimen/settings_item_vertical_indentation"
+        android:textColor="@color/btn_text_color"
+        android:text="@string/txt_share_app"
+        android:textSize="@dimen/other_text_size" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:fontFamily="@font/ys_display_regular"
-            android:text="@string/txt_share_app"
-            android:textColor="@color/btn_text_color"
-            android:textSize="@dimen/other_text_size"/>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="end"
-            android:minWidth="@dimen/min_size_ico"
-            android:minHeight="@dimen/min_size_ico"
-            android:scaleType="center"
-            android:src="@drawable/ic_share"/>
-
-    </FrameLayout>
-
-    <FrameLayout
+    <com.google.android.material.textview.MaterialTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/standard_indentation"
-        android:paddingBottom="@dimen/standard_indentation">
+        android:drawableEnd="@drawable/ic_support"
+        android:paddingHorizontal="@dimen/standard_indentation"
+        android:paddingVertical="@dimen/settings_item_vertical_indentation"
+        android:textColor="@color/btn_text_color"
+        android:text="@string/txt_write_to_support"
+        android:textSize="@dimen/other_text_size" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/ys_display_regular"
-            android:text="@string/txt_write_to_support"
-            android:textColor="@color/btn_text_color"
-            android:textSize="@dimen/other_text_size" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="end"
-            android:minWidth="@dimen/min_size_ico"
-            android:minHeight="@dimen/min_size_ico"
-            android:scaleType="center"
-            android:src="@drawable/ic_support" />
-
-    </FrameLayout>
-
-    <FrameLayout
+    <com.google.android.material.textview.MaterialTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/standard_indentation"
-        android:paddingBottom="@dimen/standard_indentation">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/ys_display_regular"
-            android:text="@string/txt_user_agreement"
-            android:textColor="@color/btn_text_color"
-            android:textSize="@dimen/other_text_size" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="end"
-            android:minWidth="@dimen/min_size_ico"
-            android:minHeight="@dimen/min_size_ico"
-            android:scaleType="center"
-            android:src="@drawable/ic_symbol_more"/>
-
-
-    </FrameLayout>
+        android:drawableEnd="@drawable/ic_symbol_more"
+        android:paddingHorizontal="@dimen/standard_indentation"
+        android:paddingVertical="@dimen/settings_item_vertical_indentation"
+        android:textColor="@color/btn_text_color"
+        android:text="@string/txt_user_agreement"
+        android:textSize="@dimen/other_text_size" />
 
 </LinearLayout>

@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
@@ -12,8 +11,7 @@ class SettingsActivity : AppCompatActivity() {
 
         val imgLeftArrow = findViewById<ImageView>(R.id.img_left_arrow)
         imgLeftArrow.setOnClickListener {
-            val intentMain = Intent(this, MainActivity::class.java)
-            startActivity(intentMain)
+            finish()
         }
     }
 }
