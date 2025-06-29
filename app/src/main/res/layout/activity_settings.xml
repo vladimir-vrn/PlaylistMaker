@@ -7,70 +7,36 @@
     android:orientation="vertical"
     tools:context=".SettingsActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/standard_indentation">
-
-        <ImageView
-            android:id="@+id/img_left_arrow"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_left_arrow" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/big_indentation"
-            android:layout_gravity="end"
-            android:fontFamily="@font/ys_display_medium"
-            android:text="@string/btn_settings"
-            android:textColor="@color/btn_text_color"
-            android:textSize="@dimen/heading_text_size" />
-
-    </LinearLayout>
+    <com.google.android.material.appbar.MaterialToolbar
+        style="@style/SettingsToolbar"
+        android:id="@+id/tb_settings"
+        app:title="@string/settings" />
 
     <com.google.android.material.switchmaterial.SwitchMaterial
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/SettingsItem"
+        android:id="@+id/swt_dark_theme"
+        android:text="@string/dark_theme"
         android:layout_marginTop="@dimen/big_indentation"
         android:gravity="center_vertical"
-        android:paddingHorizontal="@dimen/standard_indentation"
-        android:paddingVertical="@dimen/settings_item_vertical_indentation"
-        android:text="@string/txt_dark_theme"
-        android:textSize="@dimen/other_text_size"
         app:thumbTint="@color/switch_thumb_selector"
         app:trackTint="@color/switch_track_selector" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:drawableEnd="@drawable/ic_share"
-        android:paddingHorizontal="@dimen/standard_indentation"
-        android:paddingVertical="@dimen/settings_item_vertical_indentation"
-        android:textColor="@color/btn_text_color"
-        android:text="@string/txt_share_app"
-        android:textSize="@dimen/other_text_size" />
+        style="@style/SettingsItem"
+        android:id="@+id/btn_share_app"
+        android:text="@string/share_app"
+        android:drawableEnd="@drawable/ic_share" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:drawableEnd="@drawable/ic_support"
-        android:paddingHorizontal="@dimen/standard_indentation"
-        android:paddingVertical="@dimen/settings_item_vertical_indentation"
-        android:textColor="@color/btn_text_color"
-        android:text="@string/txt_write_to_support"
-        android:textSize="@dimen/other_text_size" />
+        style="@style/SettingsItem"
+        android:id="@+id/btn_support"
+        android:text="@string/write_to_support"
+        android:drawableEnd="@drawable/ic_support" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:drawableEnd="@drawable/ic_symbol_more"
-        android:paddingHorizontal="@dimen/standard_indentation"
-        android:paddingVertical="@dimen/settings_item_vertical_indentation"
-        android:textColor="@color/btn_text_color"
-        android:text="@string/txt_user_agreement"
-        android:textSize="@dimen/other_text_size" />
+        style="@style/SettingsItem"
+        android:id="@+id/btn_user_agreement"
+        android:text="@string/user_agreement"
+        android:drawableEnd="@drawable/ic_symbol_more" />
 
 </LinearLayout>
