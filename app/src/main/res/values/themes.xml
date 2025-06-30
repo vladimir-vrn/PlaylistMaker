@@ -5,5 +5,7 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
-    <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker" />
+    <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker">
+        <item name="colorControlActivated">@color/yp_blue</item>
+    </style>
 </resources>

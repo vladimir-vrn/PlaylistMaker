@@ -1,0 +1,26 @@
+<resources>
+    <style name="MainLayout">
+    </style>
+    <style name="SettingsToolbar" parent="Toolbar">
+        <item name="titleTextColor">@color/yp_white</item>
+        <item name="navigationIconTint">@color/yp_white</item>
+    </style>
+    <style name="SettingsItem" parent="SettingsItemGeneral">
+        <item name="drawableTint">@color/yp_white</item>
+        <item name="android:textColor">@color/yp_white</item>
+    </style>
+    <style name="SearchToolbar" parent="Toolbar">
+        <item name="titleTextColor">@color/yp_white</item>
+        <item name="navigationIconTint">@color/yp_white</item>
+    </style>
+    <style name="SearchColor">
+        <item name="android:drawableTint">@color/yp_black</item>
+        <item name="android:textColor">@color/yp_black</item>
+        <item name="android:textColorHint">@color/yp_black</item>
+        <item name="tint">@color/yp_black</item>
+    </style>
+    <style name="MediaLibraryToolbar" parent="Toolbar">
+        <item name="titleTextColor">@color/yp_white</item>
+        <item name="navigationIconTint">@color/yp_white</item>
+    </style>
+</resources>

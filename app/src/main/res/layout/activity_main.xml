@@ -2,82 +2,37 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/MainLayout"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/standard_indentation"
-    android:paddingRight="@dimen/standard_indentation"
     android:orientation="vertical"
-    android:background="@color/screen_color"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/standard_indentation"
-        android:layout_marginBottom="@dimen/big_indentation"
-        android:insetTop="0dp"
-        android:insetBottom="0dp"
-        android:text="@string/app_name"
-        android:textColor="@color/screen_text_color"
-        android:textSize="@dimen/heading_text_size"
-        android:fontFamily="@font/ys_display_medium"/>
+    <com.google.android.material.appbar.MaterialToolbar
+        style="@style/MainToolbar"
+        android:id="@+id/tb_main"
+        app:navigationIcon="@null"
+        app:title="@string/app_name" />
 
     <Button
+        style="@style/MainButton"
         android:id="@+id/btn_search"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/standard_indentation"
-        android:layout_weight="1"
-        android:backgroundTint="@color/btn_color"
-        android:fontFamily="@font/ys_display_medium"
-        android:insetTop="0dp"
-        android:insetBottom="0dp"
-        android:text="@string/btn_search"
-        android:textAllCaps="false"
-        android:textColor="@color/btn_text_color"
-        android:textSize="@dimen/btn_text_size"
-        app:cornerRadius="@dimen/btn_corner_radius"
-        app:icon="@drawable/ic_find"
-        app:iconTint="@color/btn_text_color"
-        app:iconGravity="textStart"/>
+        android:layout_marginTop="@dimen/big_indentation"
+        android:text="@string/search"
+        app:icon="@drawable/ic_find" />
 
     <Button
+        style="@style/MainButton"
         android:id="@+id/btn_media_library"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/standard_indentation"
-        android:layout_weight="1"
-        android:backgroundTint="@color/btn_color"
-        android:fontFamily="@font/ys_display_medium"
-        android:insetTop="0dp"
-        android:insetBottom="0dp"
-        android:text="@string/btn_media_library"
-        android:textAllCaps="false"
-        android:textColor="@color/btn_text_color"
-        android:textSize="@dimen/btn_text_size"
-        app:cornerRadius="@dimen/btn_corner_radius"
-        app:icon="@drawable/ic_media_library"
-        app:iconTint="@color/btn_text_color"
-        app:iconGravity="textStart"/>
+        android:text="@string/media_library"
+        app:icon="@drawable/ic_media_library" />
 
     <Button
+        style="@style/MainButton"
         android:id="@+id/btn_settings"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
         android:layout_marginBottom="@dimen/big_indentation"
-        android:layout_weight="1"
-        android:backgroundTint="@color/btn_color"
-        android:fontFamily="@font/ys_display_medium"
-        android:insetTop="0dp"
-        android:insetBottom="0dp"
-        android:text="@string/btn_settings"
-        android:textAllCaps="false"
-        android:textColor="@color/btn_text_color"
-        android:textSize="@dimen/btn_text_size"
-        app:cornerRadius="@dimen/btn_corner_radius"
-        app:icon="@drawable/ic_settings"
-        app:iconTint="@color/btn_text_color"
-        app:iconGravity="textStart"/>
+        android:text="@string/settings"
+        app:icon="@drawable/ic_settings" />
 
 </LinearLayout>
