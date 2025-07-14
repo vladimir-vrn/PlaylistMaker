@@ -8,7 +8,7 @@
     <style name="SettingsItem" parent="SettingsItemGeneral">
         <item name="drawableTint">@color/yp_white</item>
         <item name="android:textColor">@color/yp_white</item>
-    </style>
+    </style>q
     <style name="SearchToolbar" parent="Toolbar">
         <item name="titleTextColor">@color/yp_white</item>
         <item name="navigationIconTint">@color/yp_white</item>
@@ -22,5 +22,13 @@
     <style name="MediaLibraryToolbar" parent="Toolbar">
         <item name="titleTextColor">@color/yp_white</item>
         <item name="navigationIconTint">@color/yp_white</item>
+    </style>
+    <style name="TrackColor" parent="TrackColorGeneral">
+        <item name="android:textColor">@color/yp_white</item>
+        <item name="tint">@color/yp_white</item>
+    </style>
+    <style name="TrackColorName" parent="TrackColorGeneral">
+        <item name="android:textColor">@color/yp_white</item>
+        <item name="android:textSize">@dimen/other_text_size</item>
     </style>
 </resources>

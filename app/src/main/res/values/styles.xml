@@ -60,4 +60,22 @@
     </style>
     <style name="MediaLibraryToolbar" parent="Toolbar">
     </style>
+    <style name="TrackColorGeneral">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="tint">@color/yp_text_gray</item>
+        <item name="android:textColor">@color/yp_text_gray</item>
+        <item name="android:textSize">@dimen/small_text_size</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
+    </style>
+    <style name="TrackColor" parent="TrackColorGeneral">
+    </style>
+    <style name="TrackColorName" parent="TrackColorGeneral">
+        <item name="android:textColor">@color/yp_black</item>
+        <item name="android:textSize">@dimen/other_text_size</item>
+    </style>
 </resources>

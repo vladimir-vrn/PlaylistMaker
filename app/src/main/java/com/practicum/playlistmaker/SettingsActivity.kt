@@ -2,7 +2,6 @@ package com.practicum.playlistmaker
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 
@@ -27,7 +26,7 @@ class SettingsActivity : AppCompatActivity() {
         val btnSupport = findViewById<com.google.android.material.textview.MaterialTextView>(R.id.btn_support)
         btnSupport.setOnClickListener {
             val supportIntent = Intent(Intent.ACTION_SENDTO)
-            supportIntent.data = "mailto:".toUri()
+            supportIntent.data = getString(R.string.mailto_intent_data).toUri()
             supportIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.support_email)))
             supportIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.support_message))
             supportIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.support_subject))

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        style="@style/TrackColor"
+        android:id="@+id/trackImage"
+        android:layout_marginVertical="@dimen/small_indentation"
+        android:layout_marginStart="@dimen/img_padding"
+        android:src="@drawable/placeholder"
+        app:tint="@null" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="@dimen/small_indentation"
+        android:layout_marginTop="@dimen/items_txt_indentation">
+
+        <TextView
+            style="@style/TrackColorName"
+            android:id="@+id/trackName"
+            tools:text="@string/search"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <TextView
+                style="@style/TrackColor"
+                android:id="@+id/artistName"
+                android:layout_marginEnd="@dimen/img_padding"
+                app:layout_constraintEnd_toStartOf="@+id/trackTime"
+                app:layout_constraintTop_toTopOf="@+id/trackDot"
+                tools:text="@string/search" />
+
+            <ImageView
+                style="@style/TrackColor"
+                android:id="@+id/trackDot"
+                android:src="@drawable/ic_dot"
+                app:layout_constraintStart_toEndOf="@+id/artistName"
+                app:layout_constraintTop_toTopOf="@+id/trackTime" />
+
+            <TextView
+                style="@style/TrackColor"
+                android:id="@+id/trackTime"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:text="@string/search" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+    <ImageView
+        style="@style/TrackColor"
+        android:id="@+id/trackSymbolMore"
+        android:layout_marginStart="@dimen/small_indentation"
+        android:layout_marginEnd="@dimen/standard_indentation"
+        android:src="@drawable/ic_symbol_more"/>
+
+</LinearLayout>
