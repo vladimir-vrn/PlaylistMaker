@@ -31,4 +31,11 @@
         <item name="android:textColor">@color/yp_white</item>
         <item name="android:textSize">@dimen/other_text_size</item>
     </style>
+    <style name="BtnPlaceholder" parent="BtnPlaceholderGeneral">
+        <item name="android:backgroundTint">@color/yp_white</item>
+        <item name="android:textColor">@color/yp_black</item>
+    </style>
+    <style name="TxtPlaceholder" parent="TxtPlaceholderGeneral">
+        <item name="android:textColor">@color/yp_white</item>
+    </style>
 </resources>
