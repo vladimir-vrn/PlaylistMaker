@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -114,7 +113,7 @@ class SearchActivity : AppCompatActivity() {
     private fun findTracks(text: String) {
 
         if (text.isNotEmpty()) {
-            iTunesSearch.search(text).enqueue(object : Callback<TracksResponse> {
+            iTunesSearch.search(text, "song").enqueue(object : Callback<TracksResponse> {
 
                 override fun onResponse(call: Call<TracksResponse>, response: Response<TracksResponse>) {
 
@@ -122,9 +121,12 @@ class SearchActivity : AppCompatActivity() {
                     msgCommunicationProblems.visibility = View.GONE
                     adapter.tracks.clear()
 
-                    if (response.code() == 200) {
-                        if (response.body()?.results?.isNotEmpty() == true) {
-                            adapter.tracks.addAll(response.body()?.results!!)
+                    if (response.isSuccessful) {
+                        val resultsResponse = response.body()?.results
+                        if (resultsResponse == null) {
+                            msgCommunicationProblems.visibility = View.VISIBLE
+                        } else if (resultsResponse.isNotEmpty()) {
+                            adapter.tracks.addAll(resultsResponse)
                         } else {
                             msgNothingWasFound.visibility = View.VISIBLE
                         }
@@ -153,7 +155,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val INPUT_EDIT_TEXT_VALUE = "INPUT_EDIT_TEXT_VALUE"
-        const val INPUT_EDIT_TEXT_DEF = ""
+        private const val INPUT_EDIT_TEXT_VALUE = "INPUT_EDIT_TEXT_VALUE"
+        private const val INPUT_EDIT_TEXT_DEF = ""
     }
 }

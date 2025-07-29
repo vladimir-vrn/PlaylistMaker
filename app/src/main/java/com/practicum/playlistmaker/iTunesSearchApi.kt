@@ -7,5 +7,8 @@ import retrofit2.http.Query
 interface iTunesSearchApi {
 
     @GET("search")
-    fun search(@Query("term") text: String): Call<TracksResponse>
+    fun search(
+        @Query("term") text: String,
+        @Query("entity") entity: String
+    ): Call<TracksResponse>
 }

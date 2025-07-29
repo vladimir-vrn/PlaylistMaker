@@ -64,7 +64,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:scaleType">fitCenter</item>
+        <item name="android:scaleType">fitXY</item>
         <item name="tint">@color/yp_text_gray</item>
         <item name="android:textColor">@color/yp_text_gray</item>
         <item name="android:textSize">@dimen/small_text_size</item>
@@ -73,6 +73,10 @@
         <item name="android:maxLines">1</item>
     </style>
     <style name="TrackColor" parent="TrackColorGeneral">
+    </style>
+    <style name="TrackColorImage" parent="TrackColorGeneral">
+        <item name="android:layout_width">@dimen/track_image_size</item>
+        <item name="android:layout_height">@dimen/track_image_size</item>
     </style>
     <style name="TrackColorName" parent="TrackColorGeneral">
         <item name="android:textColor">@color/yp_black</item>
