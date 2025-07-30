@@ -7,7 +7,7 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        style="@style/TrackColor"
+        style="@style/TrackColorImage"
         android:id="@+id/trackImage"
         android:layout_marginVertical="@dimen/small_indentation"
         android:layout_marginStart="@dimen/img_padding"

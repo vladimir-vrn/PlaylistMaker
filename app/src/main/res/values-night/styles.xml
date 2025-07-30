@@ -31,4 +31,17 @@
         <item name="android:textColor">@color/yp_white</item>
         <item name="android:textSize">@dimen/other_text_size</item>
     </style>
+    <style name="TrackColorImage" parent="TrackColorGeneral">
+        <item name="android:textColor">@color/yp_white</item>
+        <item name="tint">@color/yp_white</item>
+        <item name="android:layout_width">@dimen/track_image_size</item>
+        <item name="android:layout_height">@dimen/track_image_size</item>
+    </style>
+    <style name="BtnPlaceholder" parent="BtnPlaceholderGeneral">
+        <item name="android:backgroundTint">@color/yp_white</item>
+        <item name="android:textColor">@color/yp_black</item>
+    </style>
+    <style name="TxtPlaceholder" parent="TxtPlaceholderGeneral">
+        <item name="android:textColor">@color/yp_white</item>
+    </style>
 </resources>

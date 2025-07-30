@@ -34,7 +34,9 @@
             android:inputType="text"
             android:maxLength="100"
             android:maxLines="1"
-            android:minHeight="48dp" />
+            android:minHeight="48dp"
+            android:imeOptions="actionDone"
+            android:singleLine="true"/>
 
         <ImageView
             style="@style/SearchColor"
@@ -51,7 +53,40 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+    <LinearLayout
+        style="@style/LinearLayoutPlaceholder"
+        android:id="@+id/msgNothingWasFound">
+
+        <ImageView
+            style="@style/ImgPlaceholder"
+            android:src="@drawable/ic_nothing_was_found"/>
+
+        <TextView
+            style="@style/TxtPlaceholder"
+            android:text="@string/nothing_was_found"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/LinearLayoutPlaceholder"
+        android:id="@+id/msgCommunicationProblems">
+
+        <ImageView
+            style="@style/ImgPlaceholder"
+            android:src="@drawable/ic_communication_problems"/>
+
+        <TextView
+            style="@style/TxtPlaceholder"
+            android:text="@string/communication_problems"/>
+
+        <Button
+            style="@style/BtnPlaceholder"
+            android:id="@+id/btnUpdateSearch"
+            android:text="@string/update_search"/>
+
+    </LinearLayout>
 
 </LinearLayout>
