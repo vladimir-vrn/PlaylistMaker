@@ -10,7 +10,7 @@
     <string name="intent_share_app">https://practicum.yandex.ru/profile/android-developer/</string>
     <string name="intent_share_app_header">Поделиться приложением</string>
     <string name="support_message">Спасибо разработчикам и разработчицам за крутое приложение!</string>
-    <string name="support_email"> d.vladimir.ymb@yandex.ru</string>
+    <string name="support_email">d.vladimir.ymb@yandex.ru</string>
     <string name="support_subject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="user_agreement_website">https://yandex.ru/legal/practicum_offer/</string>
     <string name="clear_text">Очистить текст</string>
@@ -18,4 +18,6 @@
     <string name="nothing_was_found">Ничего не нашлось</string>
     <string name="communication_problems">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
     <string name="update_search">Обновить</string>
+    <string name="history_txt">История поиска</string>
+    <string name="clear_history">Очистить историю</string>
 </resources>

@@ -25,6 +25,7 @@
             android:id="@+id/inputEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingEnd="@dimen/track_image_size"
             android:autofillHints=""
             android:drawableStart="@drawable/ic_find"
             android:drawablePadding="@dimen/small_indentation"
@@ -86,6 +87,28 @@
             style="@style/BtnPlaceholder"
             android:id="@+id/btnUpdateSearch"
             android:text="@string/update_search"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/LinearLayoutSearchHistory"
+        android:id="@+id/vgSearchHistory">
+
+        <TextView
+            style="@style/TxtPlaceholder"
+            android:text="@string/history_txt"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewSearchHistory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/standard_indentation"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+        <Button
+            style="@style/BtnPlaceholder"
+            android:id="@+id/btnClearHistory"
+            android:text="@string/clear_history"/>
 
     </LinearLayout>
 

@@ -121,4 +121,12 @@
         <item name="android:gravity">center_vertical</item>
         <item name="android:visibility">gone</item>
     </style>
+    <style name="LinearLayoutSearchHistory">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:paddingTop">@dimen/big_indentation</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:gravity">top</item>
+        <item name="android:visibility">gone</item>
+    </style>
 </resources>
