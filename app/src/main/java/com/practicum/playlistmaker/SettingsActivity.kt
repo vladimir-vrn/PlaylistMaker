@@ -18,10 +18,9 @@ class SettingsActivity : AppCompatActivity() {
 
         val appClass = (applicationContext as App)
         val swtDarkTheme = findViewById<SwitchMaterial>(R.id.swt_dark_theme)
-        swtDarkTheme.isChecked = appClass.darkTheme
+        swtDarkTheme.isChecked = appClass.getDarkTheme()
         swtDarkTheme.setOnCheckedChangeListener { switcher, checked ->
-            appClass.darkTheme = checked
-            appClass.switchTheme()
+            appClass.switchTheme(checked)
         }
 
         val btnShareApp = findViewById<com.google.android.material.textview.MaterialTextView>(R.id.btn_share_app)

@@ -123,8 +123,9 @@
     </style>
     <style name="LinearLayoutSearchHistory">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:paddingTop">@dimen/big_indentation</item>
+        <item name="android:paddingBottom">@dimen/standard_indentation</item>
         <item name="android:orientation">vertical</item>
         <item name="android:gravity">top</item>
         <item name="android:visibility">gone</item>

@@ -32,7 +32,7 @@ class SearchHistory (
     fun onItemClick(track: Track) {
         val trackPosition = tracks.indexOf(track)
         if (trackPosition == -1) {
-            if (tracks.size == 10) tracks.removeAt(9)
+            if (tracks.size == DEPTH_SEARCH_HISTORY) tracks.removeAt(DEPTH_SEARCH_HISTORY - 1)
         } else {
             tracks.removeAt(trackPosition)
         }
@@ -41,6 +41,7 @@ class SearchHistory (
 
     companion object {
         private const val SEARCH_HISTORY_KEY = "search_history_tracks"
+        private const val DEPTH_SEARCH_HISTORY = 10
     }
 
 }
