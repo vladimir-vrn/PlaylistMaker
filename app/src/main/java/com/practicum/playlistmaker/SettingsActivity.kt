@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,6 +14,13 @@ class SettingsActivity : AppCompatActivity() {
         val tbSettings = findViewById<com.google.android.material.appbar.MaterialToolbar>(R.id.tb_settings)
         tbSettings.setNavigationOnClickListener {
             finish()
+        }
+
+        val appClass = (applicationContext as App)
+        val swtDarkTheme = findViewById<SwitchMaterial>(R.id.swt_dark_theme)
+        swtDarkTheme.isChecked = appClass.getDarkTheme()
+        swtDarkTheme.setOnCheckedChangeListener { switcher, checked ->
+            appClass.switchTheme(checked)
         }
 
         val btnShareApp = findViewById<com.google.android.material.textview.MaterialTextView>(R.id.btn_share_app)
