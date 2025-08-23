@@ -12,7 +12,10 @@
     <dimen name="btn_text_size">22sp</dimen>
     <dimen name="btn_small_text_size">14sp</dimen>
     <dimen name="heading_text_size">22sp</dimen>
+    <dimen name="heading_small_text_size">14sp</dimen>
+    <dimen name="heading_small_text_size_minus_one">13sp</dimen>
     <dimen name="other_text_size">16sp</dimen>
     <dimen name="small_text_size">11sp</dimen>
     <dimen name="track_image_size">45dp</dimen>
+    <dimen name="track_image_max_size">512dp</dimen>
 </resources>

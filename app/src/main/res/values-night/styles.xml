@@ -44,4 +44,13 @@
     <style name="TxtPlaceholder" parent="TxtPlaceholderGeneral">
         <item name="android:textColor">@color/yp_white</item>
     </style>
+    <style name="PlayerToolbar" parent="Toolbar">
+        <item name="navigationIconTint">@color/yp_white</item>
+    </style>
+    <style name="PlayerTxtHeading" parent="PlayerTxtHeadingGeneral">
+        <item name="android:textColor">@color/yp_white</item>
+    </style>
+    <style name="PlayerTxt" parent="PlayerTxtGeneral">
+        <item name="android:textColor">@color/yp_white</item>
+    </style>
 </resources>

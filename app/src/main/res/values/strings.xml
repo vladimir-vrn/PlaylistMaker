@@ -20,4 +20,12 @@
     <string name="update_search">Обновить</string>
     <string name="history_txt">История поиска</string>
     <string name="clear_history">Очистить историю</string>
+    <string name="track_time_title">Длительность</string>
+    <string name="collection_name_title">Альбом</string>
+    <string name="release_date_title">Год</string>
+    <string name="primary_genre_name_title">Жанр</string>
+    <string name="country_title">Страна</string>
+    <string name="player_open_error_dialog_title">Ошибка при открытии</string>
+    <string name="player_open_error_dialog_message">Отстствуют данные о треке\nДальнейшая работа не возможна</string>
+    <string name="player_open_error_dialog_positive_btn">Продолжить</string>
 </resources>

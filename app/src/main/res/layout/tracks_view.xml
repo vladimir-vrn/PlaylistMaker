@@ -35,21 +35,22 @@
                 style="@style/TrackColor"
                 android:id="@+id/artistName"
                 android:layout_marginEnd="@dimen/img_padding"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/trackTime"
-                app:layout_constraintTop_toTopOf="@+id/trackDot"
                 tools:text="@string/search" />
 
             <ImageView
                 style="@style/TrackColor"
                 android:id="@+id/trackDot"
                 android:src="@drawable/ic_dot"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/artistName"
-                app:layout_constraintTop_toTopOf="@+id/trackTime" />
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
             <TextView
                 style="@style/TrackColor"
                 android:id="@+id/trackTime"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 tools:text="@string/search" />
 

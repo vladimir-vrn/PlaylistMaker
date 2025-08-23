@@ -130,4 +130,47 @@
         <item name="android:gravity">top</item>
         <item name="android:visibility">gone</item>
     </style>
+    <style name="PlayerToolbar" parent="Toolbar">
+    </style>
+    <style name="PlayerImageView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:scaleType">centerCrop</item>
+    </style>
+    <style name="PlayerTxtHeadingGeneral">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/big_indentation</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textSize">@dimen/heading_text_size</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textColor">@color/yp_black</item>
+    </style>
+    <style name="PlayerTxtHeading" parent="PlayerTxtHeadingGeneral">
+    </style>
+    <style name="PlayerTxtTitlesGeneral">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/standard_indentation</item>
+        <item name="android:layout_marginStart">@dimen/standard_indentation</item>
+        <item name="android:textSize">@dimen/heading_small_text_size_minus_one</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">@color/yp_text_gray</item>
+        <item name="layout_constraintStart_toStartOf">parent</item>
+    </style>
+    <style name="PlayerTxtTitles" parent="PlayerTxtTitlesGeneral">
+    </style>
+    <style name="PlayerTxtGeneral">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">@dimen/standard_indentation</item>
+        <item name="android:gravity">end</item>
+        <item name="android:textSize">@dimen/heading_small_text_size_minus_one</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">@color/yp_black</item>
+        <item name="layout_constraintEnd_toEndOf">parent</item>
+    </style>
+    <style name="PlayerTxt" parent="PlayerTxtGeneral">
+    </style>
 </resources>
