@@ -23,8 +23,8 @@ import retrofit2.create
 class SearchActivity : AppCompatActivity() {
 
     private var inputEditTextValue = INPUT_EDIT_TEXT_DEF
-    private val adapter = TracksAdapter()
-    private val adapterSearchHistory = TracksAdapter()
+    private val adapter = TracksAdapter(this@SearchActivity)
+    private val adapterSearchHistory = TracksAdapter(this@SearchActivity)
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://itunes.apple.com")
         .addConverterFactory(GsonConverterFactory.create())

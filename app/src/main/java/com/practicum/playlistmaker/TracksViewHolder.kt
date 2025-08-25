@@ -29,6 +29,6 @@ class TracksViewHolder(trackView: View): RecyclerView.ViewHolder(trackView) {
 
         trackName.text = track.trackName
         artistName.text = track.artistName
-        trackTime.text = if (track.trackTime == null) "" else SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTime.toLong())
+        trackTime.text = if (track.trackTime == null) "" else SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTime)
     }
 }

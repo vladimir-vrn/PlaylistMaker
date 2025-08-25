@@ -17,6 +17,7 @@ class App : Application() {
         if (darkThemePrefs != ((resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES)) {
             switchTheme(darkThemePrefs)
         }
+        if (darkThemePrefs != darkTheme) darkTheme = darkThemePrefs
     }
 
     fun switchTheme(turnDarkTheme: Boolean) {

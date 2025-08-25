@@ -7,5 +7,6 @@
 
     <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker">
         <item name="colorControlActivated">@color/yp_blue</item>
+        <item name="android:fitsSystemWindows">true</item>
     </style>
 </resources>
