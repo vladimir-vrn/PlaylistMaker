@@ -85,6 +85,7 @@
                 android:layout_width="wrap_content"
                 android:layout_marginTop="4dp"
                 android:textSize="@dimen/heading_small_text_size"
+                android:text="@string/player_track_play_time"
                 app:layout_constraintStart_toStartOf="@+id/trackImage"
                 app:layout_constraintEnd_toEndOf="@+id/trackImage"
                 app:layout_constraintTop_toBottomOf="@+id/trackPlay"

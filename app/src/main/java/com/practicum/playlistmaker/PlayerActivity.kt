@@ -1,6 +1,9 @@
 package com.practicum.playlistmaker
 
+import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -9,12 +12,23 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.gson.Gson
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
-
-    var playTime = 30
+    private var mediaPlayer = MediaPlayer()
+    private var playerState = STATE_DEFAULT
+    private lateinit var trackPlay: ImageView
+    private lateinit var trackPlayTime: TextView
+    private lateinit var track: Track
+    private val handler = Handler(Looper.getMainLooper())
+    private val refreshRunnable = object : Runnable {
+        override fun run() {
+            trackPlayTime.text = timeFormatMmSs(mediaPlayer.currentPosition.toLong())
+            handler.postDelayed(
+                this,
+                REFRESH_TRACK_PLAY_TIME,
+            )
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +44,7 @@ class PlayerActivity : AppCompatActivity() {
             dialog.show()
             return
         }
-        val track = Gson().fromJson(trackJsonString, Track::class.java)
+        track = Gson().fromJson(trackJsonString, Track::class.java)
 
         val tbPlayer = findViewById<com.google.android.material.appbar.MaterialToolbar>(R.id.tbPlayer)
         tbPlayer.setNavigationOnClickListener {
@@ -50,7 +64,6 @@ class PlayerActivity : AppCompatActivity() {
 
         val trackName = findViewById<TextView>(R.id.trackName)
         val artistName = findViewById<TextView>(R.id.artistName)
-        val trackPlayTime = findViewById<TextView>(R.id.trackPlayTime)
         val trackTime = findViewById<TextView>(R.id.trackTime)
         val collectionNameTitle = findViewById<TextView>(R.id.collectionNameTitle)
         val collectionName = findViewById<TextView>(R.id.collectionName)
@@ -59,10 +72,13 @@ class PlayerActivity : AppCompatActivity() {
         val primaryGenreName = findViewById<TextView>(R.id.primaryGenreName)
         val country = findViewById<TextView>(R.id.country)
 
+        trackPlay = findViewById(R.id.trackPlay)
+        trackPlay.setOnClickListener { playbackControl() }
+        trackPlayTime = findViewById(R.id.trackPlayTime)
+
         trackName.text = track.trackName
         artistName.text = track.artistName
-        trackPlayTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(playTime * 1000)
-        trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTime)
+        trackTime.text = timeFormatMmSs(track.trackTime)
         if (track.collectionName.isNullOrEmpty()) {
             collectionNameTitle.visibility = View.GONE
             collectionName.visibility = View.GONE
@@ -78,5 +94,66 @@ class PlayerActivity : AppCompatActivity() {
         primaryGenreName.text = track.primaryGenreName
         country.text = track.country
 
+        preparePlayer()
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+        pausePlayer()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.release()
+        handler.removeCallbacks(refreshRunnable)
+    }
+
+    private fun preparePlayer() {
+        mediaPlayer.setDataSource(track.previewUrl)
+        mediaPlayer.prepareAsync()
+        mediaPlayer.setOnPreparedListener {
+            playerState = STATE_PREPARED
+        }
+        mediaPlayer.setOnCompletionListener {
+            playerState = STATE_PREPARED
+            trackPlay.setImageResource(R.drawable.track_play)
+            handler.removeCallbacks(refreshRunnable)
+            trackPlayTime.text = getString(R.string.player_track_play_time)
+        }
+    }
+
+    private fun startPlayer() {
+        mediaPlayer.start()
+        playerState = STATE_PLAYING
+        trackPlay.setImageResource(R.drawable.track_pause)
+        handler.postDelayed(refreshRunnable, REFRESH_TRACK_PLAY_TIME)
+    }
+
+    private fun pausePlayer() {
+        mediaPlayer.pause()
+        playerState = STATE_PAUSED
+        trackPlay.setImageResource(R.drawable.track_play)
+        handler.removeCallbacks(refreshRunnable)
+    }
+
+    private fun playbackControl() {
+
+        when(playerState) {
+            STATE_PLAYING -> {
+                pausePlayer()
+            }
+            STATE_PREPARED, STATE_PAUSED -> {
+                startPlayer()
+            }
+        }
+    }
+
+    companion object {
+        private const val STATE_DEFAULT = 0
+        private const val STATE_PREPARED = 1
+        private const val STATE_PLAYING = 2
+        private const val STATE_PAUSED = 3
+        private const val REFRESH_TRACK_PLAY_TIME = 500L
     }
 }
