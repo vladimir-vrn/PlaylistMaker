@@ -71,6 +71,10 @@
 
     </LinearLayout>
 
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        style="@style/SearchProgressBar"
+        android:id="@+id/progressBar" />
+
     <LinearLayout
         style="@style/LinearLayoutPlaceholder"
         android:id="@+id/msgCommunicationProblems">

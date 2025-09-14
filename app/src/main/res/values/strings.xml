@@ -28,4 +28,6 @@
     <string name="player_open_error_dialog_title">Ошибка при открытии</string>
     <string name="player_open_error_dialog_message">Отстствуют данные о треке\nДальнейшая работа не возможна</string>
     <string name="player_open_error_dialog_positive_btn">Продолжить</string>
+    <string name="player_track_play_time">00:00</string>
+    <string name="base_url">https://itunes.apple.com</string>
 </resources>

@@ -2,6 +2,8 @@ package com.practicum.playlistmaker
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -13,6 +15,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -30,9 +33,13 @@ class SearchActivity : AppCompatActivity() {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
     private val iTunesSearch = retrofit.create<iTunesSearchApi>()
+    private lateinit var inputEditText: EditText
     private lateinit var msgNothingWasFound: LinearLayout
     private lateinit var msgCommunicationProblems: LinearLayout
     private lateinit var vgSearchHistory: LinearLayout
+    private lateinit var progressBar: CircularProgressIndicator
+    private val searchRunnable = Runnable { findTracks() }
+    private val handler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,9 +47,10 @@ class SearchActivity : AppCompatActivity() {
 
         adapter.searchHistory = SearchHistory((applicationContext as App).getPlayListPrefs())
 
-        msgNothingWasFound = findViewById<LinearLayout>(R.id.msgNothingWasFound)
-        msgCommunicationProblems = findViewById<LinearLayout>(R.id.msgCommunicationProblems)
-        vgSearchHistory = findViewById<LinearLayout>(R.id.vgSearchHistory)
+        msgNothingWasFound = findViewById(R.id.msgNothingWasFound)
+        msgCommunicationProblems = findViewById(R.id.msgCommunicationProblems)
+        vgSearchHistory = findViewById(R.id.vgSearchHistory)
+        progressBar = findViewById(R.id.progressBar)
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.adapter = adapter
@@ -61,7 +69,7 @@ class SearchActivity : AppCompatActivity() {
             clearTracks()
         }
 
-        val inputEditText = findViewById<EditText>(R.id.inputEditText)
+        inputEditText = findViewById(R.id.inputEditText)
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
@@ -76,6 +84,7 @@ class SearchActivity : AppCompatActivity() {
                 } else {
                     inputEditTextValue = s.toString()
                     imgClear.visibility = View.VISIBLE
+                    searchDebounce()
                 }
                 updateSearchHistory(inputEditText.hasFocus() && s.isNullOrEmpty())
             }
@@ -86,7 +95,8 @@ class SearchActivity : AppCompatActivity() {
         inputEditText.addTextChangedListener(simpleTextWatcher)
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                findTracks(inputEditText.getText().toString())
+                handler.removeCallbacks(searchRunnable)
+                findTracks()
                 true
             }
             false
@@ -96,7 +106,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         val btnUpdateSearch = findViewById<Button>(R.id.btnUpdateSearch)
-        btnUpdateSearch.setOnClickListener(View.OnClickListener { findTracks(inputEditText.getText().toString()) })
+        btnUpdateSearch.setOnClickListener(View.OnClickListener { findTracks() })
 
         val btnClearHistory = findViewById<Button>(R.id.btnClearHistory)
         btnClearHistory.setOnClickListener(View.OnClickListener {
@@ -122,15 +132,17 @@ class SearchActivity : AppCompatActivity() {
         outState.putString(INPUT_EDIT_TEXT_VALUE, inputEditTextValue)
     }
 
-    private fun findTracks(text: String) {
+    private fun findTracks() {
 
-        if (text.isNotEmpty()) {
+        if (inputEditText.text.isNotEmpty()) {
 
             clearTracks()
-            iTunesSearch.search(text).enqueue(object : Callback<TracksResponse> {
+            progressBar.visibility = View.VISIBLE
+            iTunesSearch.search(inputEditText.text.toString()).enqueue(object : Callback<TracksResponse> {
 
                 override fun onResponse(call: Call<TracksResponse>, response: Response<TracksResponse>) {
 
+                    progressBar.visibility = View.GONE
                     if (response.isSuccessful) {
                         val resultsResponse = response.body()?.results
                         if (resultsResponse == null) {
@@ -148,11 +160,17 @@ class SearchActivity : AppCompatActivity() {
 
                 override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
 
+                    progressBar.visibility = View.GONE
                     msgCommunicationProblems.visibility = View.VISIBLE
                     t.printStackTrace()
                 }
             })
         }
+    }
+
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
 
     override fun onStop() {
@@ -186,5 +204,6 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         private const val INPUT_EDIT_TEXT_VALUE = "INPUT_EDIT_TEXT_VALUE"
         private const val INPUT_EDIT_TEXT_DEF = ""
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 }

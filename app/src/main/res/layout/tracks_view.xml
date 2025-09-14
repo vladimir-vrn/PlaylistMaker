@@ -1,68 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <ImageView
-        style="@style/TrackColorImage"
+        style="@style/TrackColor"
         android:id="@+id/trackImage"
-        android:layout_marginVertical="@dimen/small_indentation"
-        android:layout_marginStart="@dimen/img_padding"
+        android:layout_marginTop="@dimen/small_indentation"
+        android:layout_marginBottom="@dimen/small_indentation"
+        android:layout_marginStart="@dimen/items_txt_indentation"
         android:src="@drawable/placeholder"
-        app:tint="@null" />
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginHorizontal="@dimen/small_indentation"
-        android:layout_marginTop="@dimen/items_txt_indentation">
-
-        <TextView
-            style="@style/TrackColorName"
-            android:id="@+id/trackName"
-            tools:text="@string/search"/>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-
-            <TextView
-                style="@style/TrackColor"
-                android:id="@+id/artistName"
-                android:layout_marginEnd="@dimen/img_padding"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/trackTime"
-                tools:text="@string/search" />
-
-            <ImageView
-                style="@style/TrackColor"
-                android:id="@+id/trackDot"
-                android:src="@drawable/ic_dot"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/artistName"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-            <TextView
-                style="@style/TrackColor"
-                android:id="@+id/trackTime"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:text="@string/search" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </LinearLayout>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <ImageView
         style="@style/TrackColor"
         android:id="@+id/trackSymbolMore"
-        android:layout_marginStart="@dimen/small_indentation"
-        android:layout_marginEnd="@dimen/standard_indentation"
-        android:src="@drawable/ic_symbol_more"/>
+        android:layout_marginEnd="@dimen/img_padding"
+        android:src="@drawable/symbol_more_big"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-</LinearLayout>
+    <TextView
+        style="@style/TrackColorName"
+        android:id="@+id/trackName"
+        android:layout_width="0dp"
+        android:layout_marginTop="@dimen/items_txt_indentation"
+        android:layout_marginStart="@dimen/small_indentation"
+        android:layout_marginEnd="@dimen/small_indentation"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/trackImage"
+        app:layout_constraintEnd_toStartOf="@id/trackSymbolMore"
+        tools:text="Here Comes The Sun (Remastered Remastered 2009)"/>
+
+    <TextView
+        style="@style/TrackColor"
+        android:id="@+id/artistName"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintTop_toBottomOf="@id/trackName"
+        app:layout_constraintStart_toStartOf="@id/trackName"
+        app:layout_constraintEnd_toStartOf="@id/trackTime"
+        tools:text="The Beatles The Beatles The Beatles"/>
+
+    <TextView
+        style="@style/TrackColor"
+        android:id="@+id/trackTime"
+        app:drawableStartCompat="@drawable/ic_dot"
+        app:layout_constraintEnd_toEndOf="@id/trackName"
+        app:layout_constraintBaseline_toBaselineOf="@id/artistName"
+        app:layout_constraintStart_toEndOf="@id/artistName"
+        tools:text="4:01"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
