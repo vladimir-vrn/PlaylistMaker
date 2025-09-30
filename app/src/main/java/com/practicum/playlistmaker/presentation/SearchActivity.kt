@@ -27,7 +27,7 @@ import com.practicum.playlistmaker.domain.TracksInteractor
 class SearchActivity : AppCompatActivity() {
 
     private val tracksInteractor = Creator.provideTracksInteractor()
-    private val searchHistoryInteractor = Creator.provideSearchHistoryInteractor()
+    private val searchHistoryInteractor = Creator.provideSearchHistoryInteractor(this@SearchActivity)
     private val tracks = mutableListOf<Track>()
     private val tracksHistory = mutableListOf<Track>()
     private lateinit var adapter: TracksAdapter
@@ -47,7 +47,7 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        tracksHistory.addAll(searchHistoryInteractor.load(this@SearchActivity))
+        tracksHistory.addAll(searchHistoryInteractor.load())
 
         msgNothingWasFound = findViewById(R.id.msgNothingWasFound)
         msgCommunicationProblems = findViewById(R.id.msgCommunicationProblems)
@@ -67,14 +67,12 @@ class SearchActivity : AppCompatActivity() {
 
         adapter = TracksAdapter(
             tracks,
-            object : TracksAdapter.OnItemClickListener {
-                override fun onItemClick(position: Int) {
-                    val intentPlayerActivity = Intent(this@SearchActivity, PlayerActivity::class.java)
-                    val trackJsonString = gson.toJson(tracks[position])
-                    intentPlayerActivity.putExtra("track", trackJsonString)
-                    startActivity(intentPlayerActivity)
-                    searchHistoryInteractor.update(tracks[position], tracksHistory)
-                }
+            TracksAdapter.OnItemClickListener { position ->
+                val intentPlayerActivity = Intent(this@SearchActivity, PlayerActivity::class.java)
+                val trackJsonString = gson.toJson(tracks[position])
+                intentPlayerActivity.putExtra("track", trackJsonString)
+                startActivity(intentPlayerActivity)
+                searchHistoryInteractor.update(tracks[position], tracksHistory)
             }
         )
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
@@ -144,7 +142,7 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        searchHistoryInteractor.save(tracksHistory, this@SearchActivity)
+        searchHistoryInteractor.save(tracksHistory)
     }
 
     override fun onDestroy() {
@@ -159,24 +157,22 @@ class SearchActivity : AppCompatActivity() {
             showSearchHistory()
             progressBar.visibility = View.VISIBLE
 
-            tracksInteractor.search(inputEditText.text.toString(),
-                object : TracksInteractor.TracksConsumer {
-                    override fun consume(foundTracks: List<Track>?) {
-                        runOnUiThread {
-                            progressBar.visibility = View.GONE
-                            if (foundTracks == null) {
-                                msgCommunicationProblems.visibility = View.VISIBLE
-                            } else if (foundTracks.isEmpty()) {
-                                msgNothingWasFound.visibility = View.VISIBLE
-                            } else {
-                                tracks.addAll(foundTracks)
-                                adapter.notifyDataSetChanged()
-                            }
+            tracksInteractor.search(
+                inputEditText.text.toString(),
+                TracksInteractor.TracksConsumer { foundTracks ->
+                    runOnUiThread {
+                        progressBar.visibility = View.GONE
+                        if (foundTracks == null) {
+                            msgCommunicationProblems.visibility = View.VISIBLE
+                        } else if (foundTracks.isEmpty()) {
+                            msgNothingWasFound.visibility = View.VISIBLE
+                        } else {
+                            tracks.addAll(foundTracks)
+                            adapter.notifyDataSetChanged()
                         }
                     }
                 }
             )
-
         }
     }
 

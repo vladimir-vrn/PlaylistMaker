@@ -11,7 +11,7 @@ class TracksAdapter(
     private val onItemClickListener: TracksAdapter.OnItemClickListener
 ) : RecyclerView.Adapter<TracksViewHolder> () {
 
-    interface OnItemClickListener {
+    fun interface OnItemClickListener {
         fun onItemClick(position: Int)
     }
 
