@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.presentation
 
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -11,7 +11,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.gson.Gson
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.domain.Track
+import com.practicum.playlistmaker.dpToPx
+import com.practicum.playlistmaker.timeFormatMmSs
 
 class PlayerActivity : AppCompatActivity() {
     private var mediaPlayer = MediaPlayer()
@@ -46,14 +51,14 @@ class PlayerActivity : AppCompatActivity() {
         }
         track = Gson().fromJson(trackJsonString, Track::class.java)
 
-        val tbPlayer = findViewById<com.google.android.material.appbar.MaterialToolbar>(R.id.tbPlayer)
+        val tbPlayer = findViewById<MaterialToolbar>(R.id.tbPlayer)
         tbPlayer.setNavigationOnClickListener {
             finish()
         }
 
         val trackImage = findViewById<ImageView>(R.id.trackImage)
         Glide.with(trackImage)
-            .load(track.getCoverArtwork())
+            .load(track.coverArtwork)
             .placeholder(R.drawable.placeholder_512)
             .transform(
                 RoundedCorners(
@@ -78,7 +83,7 @@ class PlayerActivity : AppCompatActivity() {
 
         trackName.text = track.trackName
         artistName.text = track.artistName
-        trackTime.text = timeFormatMmSs(track.trackTime)
+        trackTime.text = track.trackTime
         if (track.collectionName.isNullOrEmpty()) {
             collectionNameTitle.visibility = View.GONE
             collectionName.visibility = View.GONE

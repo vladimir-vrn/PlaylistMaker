@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.presentation
 
 import android.app.Application
 import android.content.SharedPreferences
@@ -34,10 +34,6 @@ class App : Application() {
 
     fun getDarkTheme(): Boolean {
         return darkTheme
-    }
-
-    fun getPlayListPrefs(): SharedPreferences {
-        return playListPrefs
     }
 
     companion object {

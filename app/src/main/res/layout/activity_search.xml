@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".SearchActivity">
+    tools:context=".presentation.SearchActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         style="@style/SearchToolbar"
@@ -51,11 +51,23 @@
             android:visibility="gone" />
     </FrameLayout>
 
+    <TextView
+        style="@style/TxtPlaceholder"
+        android:id="@+id/txtHistory"
+        android:text="@string/history_txt"
+        android:visibility="gone"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+    <Button
+        style="@style/BtnPlaceholder"
+        android:id="@+id/btnClearHistory"
+        android:text="@string/clear_history"
+        android:visibility="gone"/>
 
     <LinearLayout
         style="@style/LinearLayoutPlaceholder"
@@ -91,29 +103,6 @@
             style="@style/BtnPlaceholder"
             android:id="@+id/btnUpdateSearch"
             android:text="@string/update_search"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        style="@style/LinearLayoutSearchHistory"
-        android:id="@+id/vgSearchHistory">
-
-        <TextView
-            style="@style/TxtPlaceholder"
-            android:text="@string/history_txt"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewSearchHistory"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginTop="@dimen/standard_indentation"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
-
-        <Button
-            style="@style/BtnPlaceholder"
-            android:id="@+id/btnClearHistory"
-            android:text="@string/clear_history"/>
 
     </LinearLayout>
 
