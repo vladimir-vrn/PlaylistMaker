@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".presentation.PlayerActivity">
+    tools:context=".player.ui.PlayerActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         style="@style/PlayerToolbar"
@@ -165,5 +165,11 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
         
     </ScrollView>
+
+    <TextView
+        style="@style/TxtPlaceholder"
+        android:id="@+id/txtPlaceholder"
+        android:text="@string/communication_problems"
+        android:visibility="gone"/>
 
 </LinearLayout>
