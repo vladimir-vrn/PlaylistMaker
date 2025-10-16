@@ -23,7 +23,10 @@ class PlayerActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(
             this,
-            PlayerViewModel.getFactory(intent.getStringExtra("track"))
+            PlayerViewModel.getFactory(
+                @Suppress("DEPRECATION")
+                intent.getParcelableExtra("track")
+            )
         ).get(PlayerViewModel::class.java)
 
         viewModel.observeState().observe(this) {
@@ -66,13 +69,13 @@ class PlayerActivity : AppCompatActivity() {
             trackName.text = track.trackName
             artistName.text = track.artistName
             trackTime.text = track.trackTime
-            if (track.collectionName.isNullOrEmpty()) {
+            if (track.collectionName.isEmpty()) {
                 collectionNameTitle.visibility = View.GONE
                 collectionName.visibility = View.GONE
             } else {
                 collectionName.text = track.collectionName
             }
-            if (track.releaseDate.isNullOrEmpty()) {
+            if (track.releaseDate.isEmpty()) {
                 releaseDateTitle.visibility = View.GONE
                 releaseDate.visibility = View.GONE
             } else {
@@ -84,9 +87,11 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun showError(errorMessage: String) {
-        binding.scvMain.visibility = View.GONE
-        binding.txtPlaceholder.text = errorMessage
-        binding.txtPlaceholder.visibility = View.VISIBLE
+        binding.apply {
+            scvMain.visibility = View.GONE
+            txtPlaceholder.text = errorMessage
+            txtPlaceholder.visibility = View.VISIBLE
+        }
     }
 
     private fun render(state: PlayerActivityState) {

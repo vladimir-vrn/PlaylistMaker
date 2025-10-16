@@ -35,7 +35,7 @@ object Creator {
 
     private fun getSearchHistoryRepository(context: Context): SearchHistoryRepository {
         return SearchHistoryRepositoryImpl(
-            PrefsStorageClient<List<Track>>(
+            PrefsStorageClient(
                 context,
                 "search_history_tracks",
                 object : TypeToken<List<Track>>() {}.type,
@@ -57,7 +57,7 @@ object Creator {
 
     private fun getSettingsRepository(context: Context): SettingsRepository {
         return SettingsRepositoryImpl(
-            PrefsStorageClient<ThemeSettings>(
+            PrefsStorageClient(
                 context,
                 "theme_settings",
                 object : TypeToken<ThemeSettings>() {}.type,

@@ -9,7 +9,6 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.google.gson.Gson
 import com.practicum.playlistmaker.search.domain.Track
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.player.ui.PlayerActivity
@@ -44,9 +43,10 @@ class SearchActivity : AppCompatActivity() {
 
         adapter = TracksAdapter(
             TracksAdapter.OnItemClickListener { position ->
-                val intentPlayerActivity = Intent(this@SearchActivity, PlayerActivity::class.java)
-                val trackJsonString = Gson().toJson(adapter.tracks[position])
-                intentPlayerActivity.putExtra("track", trackJsonString)
+                val intentPlayerActivity = Intent(
+                    this@SearchActivity, PlayerActivity::class.java
+                )
+                intentPlayerActivity.putExtra("track", adapter.tracks[position])
                 startActivity(intentPlayerActivity)
                 viewModel.updateHistory(adapter.tracks[position])
             }
@@ -63,8 +63,12 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s.isNullOrEmpty()) {
                     binding.clearIcon.visibility = View.GONE
-                    val imm = this@SearchActivity.getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager
-                    imm?.hideSoftInputFromWindow(binding.inputEditText.windowToken, 0)
+                    val imm = this@SearchActivity.getSystemService(
+                        INPUT_METHOD_SERVICE
+                    ) as? InputMethodManager
+                    imm?.hideSoftInputFromWindow(
+                        binding.inputEditText.windowToken, 0
+                    )
                     viewModel.loadHistory()
                 } else {
                     binding.clearIcon.visibility = View.VISIBLE
@@ -117,8 +121,10 @@ class SearchActivity : AppCompatActivity() {
         binding.apply {
             msgNothingWasFound.visibility = View.GONE
             msgCommunicationProblems.visibility = View.GONE
-            btnClearHistory.visibility = if (editTextInFocus() && tracks.isNotEmpty()) View.VISIBLE else View.GONE
-            txtHistory.visibility = if (editTextInFocus() && tracks.isNotEmpty()) View.VISIBLE else View.GONE
+            btnClearHistory.visibility =
+                if (editTextInFocus() && tracks.isNotEmpty()) View.VISIBLE else View.GONE
+            txtHistory.visibility =
+                if (editTextInFocus() && tracks.isNotEmpty()) View.VISIBLE else View.GONE
         }
 
         adapter.tracks.clear()

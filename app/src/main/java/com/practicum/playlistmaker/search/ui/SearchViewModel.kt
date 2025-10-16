@@ -16,7 +16,7 @@ import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.search.domain.Track
 import com.practicum.playlistmaker.search.domain.TracksInteractor
 
-class SearchViewModel(private val context: Context) : ViewModel() {
+class SearchViewModel(context: Context) : ViewModel() {
 
     private val stateLiveData = MutableLiveData<SearchActivityState>(
         SearchActivityState.Content(
@@ -31,6 +31,10 @@ class SearchViewModel(private val context: Context) : ViewModel() {
     private var lastSearchText = ""
     private val searchRunnable = Runnable { findTracks() }
     private val handler = Handler(Looper.getMainLooper())
+
+    val errorMsg = context.getString(R.string.communication_problems)
+    val emptyMsg = context.getString(R.string.nothing_was_found)
+
 
     override fun onCleared() {
         super.onCleared()
@@ -85,17 +89,17 @@ class SearchViewModel(private val context: Context) : ViewModel() {
         tracksInteractor.search(
             lastSearchText,
             TracksInteractor.TracksConsumer { foundTracks ->
-                if (foundTracks == null) {
-                    renderState(SearchActivityState.Error(
-                        context.getString(R.string.communication_problems))
+                when {
+                    foundTracks == null -> renderState(
+                        SearchActivityState.Error(errorMsg)
                     )
-                } else if (foundTracks.isEmpty()) {
-                    renderState(SearchActivityState.Empty(
-                        context.getString(R.string.nothing_was_found))
+                    foundTracks.isEmpty() -> renderState(
+                        SearchActivityState.Empty(emptyMsg)
                     )
-                } else {
-                    renderState(SearchActivityState.Content(
-                        foundTracks, false)
+                    else -> renderState(
+                        SearchActivityState.Content(
+                            foundTracks, false
+                        )
                     )
                 }
             }

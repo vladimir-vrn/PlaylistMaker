@@ -14,11 +14,12 @@ import com.practicum.playlistmaker.sharing.domain.SharingInteractor
 class SettingsViewModel(
     private val sharingInteractor: SharingInteractor,
     private val settingsInteractor: SettingsInteractor,
-    nightMode: Boolean
 ) : ViewModel() {
 
     private val stateLiveData = MutableLiveData<SettingsActivityState>(
-        SettingsActivityState.Content(nightMode)
+        SettingsActivityState.Content(
+            settingsInteractor.getThemeSettings().nightMode
+        )
     )
     fun observeState(): LiveData<SettingsActivityState> = stateLiveData
 
@@ -41,11 +42,9 @@ class SettingsViewModel(
     companion object {
         fun getFactory(context: Context): ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val settingsInteractor = Creator.providerSettingsInteractor(context)
                 SettingsViewModel(
                     Creator.provideSharingInteractor(context),
-                    settingsInteractor,
-                    settingsInteractor.getThemeSettings().nightMode
+                    Creator.providerSettingsInteractor(context),
                 )
             }
         }

@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker.player.ui
 
 import android.app.Application
+import android.content.Context
 import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
@@ -11,14 +12,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.google.gson.Gson
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.search.domain.Track
 import com.practicum.playlistmaker.utils.timeFormatMmSs
 
-class PlayerViewModel(startState: PlayerActivityState) : ViewModel() {
+class PlayerViewModel(
+    track: Track?,
+    context: Context,
+) : ViewModel() {
 
-    private val stateLiveData = MutableLiveData<PlayerActivityState>(startState)
+    private var stateLiveData: MutableLiveData<PlayerActivityState>
     fun observeState(): LiveData<PlayerActivityState> = stateLiveData
 
     private val playerStateLiveData = MutableLiveData(STATE_DEFAULT)
@@ -38,9 +41,20 @@ class PlayerViewModel(startState: PlayerActivityState) : ViewModel() {
     }
 
     init {
-        if (startState is PlayerActivityState.Content) {
-            preparePlayer(startState.track.previewUrl)
-        }
+        stateLiveData = MutableLiveData<PlayerActivityState>(
+            when {
+                track == null -> PlayerActivityState.Error(
+                    context.getString(R.string.player_open_error_dialog_message)
+                )
+                track.trackId > 0 -> {
+                    preparePlayer(track.previewUrl)
+                    PlayerActivityState.Content(track)
+                }
+                else -> PlayerActivityState.Empty(
+                    context.getString(R.string.player_open_error_dialog_message)
+                )
+            }
+        )
     }
 
     override fun onCleared() {
@@ -95,31 +109,14 @@ class PlayerViewModel(startState: PlayerActivityState) : ViewModel() {
     }
 
     companion object {
-        fun getFactory(trackJsonString: String?): ViewModelProvider.Factory = viewModelFactory {
+        fun getFactory(
+            track: Track?,
+        ): ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val context = this[APPLICATION_KEY] as Application
-                if (trackJsonString.isNullOrEmpty()) {
-                    PlayerViewModel(
-                        PlayerActivityState.Error(context.getString(R.string.player_open_error_dialog_message))
-                    )
-                } else {
-                    try {
-                        val track = Gson().fromJson(trackJsonString, Track::class.java)
-                        if (track.trackId > 0) {
-                            PlayerViewModel(
-                                PlayerActivityState.Content(track)
-                            )
-                        } else {
-                            PlayerViewModel(
-                                PlayerActivityState.Empty(context.getString(R.string.player_open_error_dialog_message))
-                            )
-                        }
-                    } catch (e: Exception) {
-                        PlayerViewModel(
-                            PlayerActivityState.Error(context.getString(R.string.player_open_error_dialog_message))
-                        )
-                    }
-                }
+                PlayerViewModel(
+                    track,
+                    this[APPLICATION_KEY] as Application,
+                )
             }
         }
 
