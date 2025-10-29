@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.player.ui
 
-import android.app.Application
 import android.content.Context
 import android.media.MediaPlayer
 import android.os.Handler
@@ -8,18 +7,16 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.search.domain.Track
 import com.practicum.playlistmaker.utils.timeFormatMmSs
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 class PlayerViewModel(
     track: Track?,
     context: Context,
-) : ViewModel() {
+) : ViewModel(), KoinComponent {
 
     private var stateLiveData: MutableLiveData<PlayerActivityState>
     fun observeState(): LiveData<PlayerActivityState> = stateLiveData
@@ -30,7 +27,7 @@ class PlayerViewModel(
     private val progressTimeLiveData = MutableLiveData(TIMER_START_TIME)
     fun observeProgressTime(): LiveData<String> = progressTimeLiveData
 
-    private val mediaPlayer = MediaPlayer()
+    private val mediaPlayer by inject<MediaPlayer>()
 
     private val handler = Handler(Looper.getMainLooper())
 
@@ -109,16 +106,6 @@ class PlayerViewModel(
     }
 
     companion object {
-        fun getFactory(
-            track: Track?,
-        ): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                PlayerViewModel(
-                    track,
-                    this[APPLICATION_KEY] as Application,
-                )
-            }
-        }
 
         const val STATE_DEFAULT = 0
         const val STATE_PREPARED = 1

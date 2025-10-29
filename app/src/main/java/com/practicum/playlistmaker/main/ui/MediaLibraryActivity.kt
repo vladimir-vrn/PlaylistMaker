@@ -2,12 +2,12 @@ package com.practicum.playlistmaker.main.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.databinding.ActivityMediaLibraryBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MediaLibraryActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: MediaLibraryViewModel
+    private val viewModel by viewModel<MediaLibraryViewModel>()
     private lateinit var binding: ActivityMediaLibraryBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -15,13 +15,16 @@ class MediaLibraryActivity : AppCompatActivity() {
         binding = ActivityMediaLibraryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(
-            this,
-            MediaLibraryViewModel.Companion.getFactory()
-        ).get(MediaLibraryViewModel::class.java)
+        viewModel.observeState().observe(this) {
+            render(it)
+        }
 
         binding.tbMediaLibrary.setNavigationOnClickListener {
             finish()
         }
+    }
+
+    private fun render(state: MediaLibraryActivityState) {
+
     }
 }

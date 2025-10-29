@@ -9,7 +9,7 @@ sealed interface PlayerActivityState {
     ) : PlayerActivityState
 
     data class Error(
-        val errorMessage: String
+        val message: String
     ) : PlayerActivityState
 
     data class Empty(

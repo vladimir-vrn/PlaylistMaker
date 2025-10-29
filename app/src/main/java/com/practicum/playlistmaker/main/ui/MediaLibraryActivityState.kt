@@ -5,6 +5,6 @@ sealed interface MediaLibraryActivityState {
     class Content : MediaLibraryActivityState
 
     data class Error(
-        val errorMessage: String
+        val message: String
     ) : MediaLibraryActivityState
 }

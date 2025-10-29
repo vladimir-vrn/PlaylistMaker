@@ -12,7 +12,7 @@ sealed interface SearchActivityState {
     ) : SearchActivityState
 
     data class Error(
-        val errorMessage: String
+        val message: String
     ) : SearchActivityState
 
     data class Empty(

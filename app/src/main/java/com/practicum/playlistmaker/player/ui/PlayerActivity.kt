@@ -3,31 +3,29 @@ package com.practicum.playlistmaker.player.ui
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
 import com.practicum.playlistmaker.search.domain.Track
 import com.practicum.playlistmaker.utils.dpToPx
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class PlayerActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: PlayerViewModel
+    private val viewModel by viewModel<PlayerViewModel> {
+        parametersOf(
+            @Suppress("DEPRECATION")
+            intent.getParcelableExtra("track")
+        )
+    }
     private lateinit var binding: ActivityPlayerBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        viewModel = ViewModelProvider(
-            this,
-            PlayerViewModel.getFactory(
-                @Suppress("DEPRECATION")
-                intent.getParcelableExtra("track")
-            )
-        ).get(PlayerViewModel::class.java)
 
         viewModel.observeState().observe(this) {
             render(it)
@@ -86,10 +84,10 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun showError(errorMessage: String) {
+    private fun showError(errorMsg: String) {
         binding.apply {
             scvMain.visibility = View.GONE
-            txtPlaceholder.text = errorMessage
+            txtPlaceholder.text = errorMsg
             txtPlaceholder.visibility = View.VISIBLE
         }
     }
@@ -97,7 +95,7 @@ class PlayerActivity : AppCompatActivity() {
     private fun render(state: PlayerActivityState) {
         when (state) {
             is PlayerActivityState.Content -> showContent(state.track)
-            is PlayerActivityState.Error -> showError(state.errorMessage)
+            is PlayerActivityState.Error -> showError(state.message)
             is PlayerActivityState.Empty -> showError(state.message)
         }
     }

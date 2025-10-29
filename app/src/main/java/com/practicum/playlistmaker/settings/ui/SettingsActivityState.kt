@@ -6,6 +6,6 @@ sealed interface SettingsActivityState {
     ) : SettingsActivityState
 
     data class Error(
-        val errorMessage: String
+        val message: String
     ) : SettingsActivityState
 }
