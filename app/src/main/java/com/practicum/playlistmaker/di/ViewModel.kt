@@ -42,7 +42,8 @@ val viewModelModule = module {
     viewModel { (track: Track?) ->
         PlayerViewModel(
             track,
-            androidContext()
+            androidContext(),
+            get()
         )
     }
 }

@@ -10,11 +10,15 @@ import com.practicum.playlistmaker.sharing.domain.SharingInteractor
 import com.practicum.playlistmaker.sharing.domain.SharingInteractorImpl
 import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
+import java.util.concurrent.Executors
 
 val domainModule = module {
 
     single<TracksInteractor> {
-        TracksInteractorImpl(get())
+        TracksInteractorImpl(
+            get(),
+            Executors.newCachedThreadPool()
+        )
     }
 
     single<SearchHistoryInteractor> {

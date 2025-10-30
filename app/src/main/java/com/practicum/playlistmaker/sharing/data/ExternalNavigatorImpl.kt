@@ -21,7 +21,12 @@ class ExternalNavigatorImpl(
             getStringResourceByName(shareAppLink)
         )
 
-        context.startActivity(Intent.createChooser(intent, context.getString(R.string.intent_share_app_header)))
+        context.startActivity(
+            Intent.createChooser(
+                intent,
+                context.getString(R.string.intent_share_app_header)
+            )
+        )
     }
 
     override fun openLink(link: String) {

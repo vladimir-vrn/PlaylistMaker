@@ -10,13 +10,12 @@ import androidx.lifecycle.ViewModel
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.search.domain.Track
 import com.practicum.playlistmaker.utils.timeFormatMmSs
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 class PlayerViewModel(
     track: Track?,
     context: Context,
-) : ViewModel(), KoinComponent {
+    private val mediaPlayer: MediaPlayer
+) : ViewModel() {
 
     private var stateLiveData: MutableLiveData<PlayerActivityState>
     fun observeState(): LiveData<PlayerActivityState> = stateLiveData
@@ -26,8 +25,6 @@ class PlayerViewModel(
 
     private val progressTimeLiveData = MutableLiveData(TIMER_START_TIME)
     fun observeProgressTime(): LiveData<String> = progressTimeLiveData
-
-    private val mediaPlayer by inject<MediaPlayer>()
 
     private val handler = Handler(Looper.getMainLooper())
 
