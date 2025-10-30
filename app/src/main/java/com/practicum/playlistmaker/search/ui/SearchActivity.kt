@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.search.ui
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -8,14 +9,14 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.search.domain.Track
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.player.ui.PlayerActivity
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: SearchViewModel
+    private val viewModel by viewModel<SearchViewModel>()
     private lateinit var binding: ActivitySearchBinding
     private lateinit var adapter: TracksAdapter
 
@@ -23,11 +24,6 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        viewModel = ViewModelProvider(
-            this,
-            SearchViewModel.getFactory()
-        ).get(SearchViewModel::class.java)
 
         viewModel.observeState().observe(this) {
             render(it)
@@ -41,16 +37,14 @@ class SearchActivity : AppCompatActivity() {
         }
         binding.tbSearch.setNavigationOnClickListener { finish() }
 
-        adapter = TracksAdapter(
-            TracksAdapter.OnItemClickListener { position ->
-                val intentPlayerActivity = Intent(
-                    this@SearchActivity, PlayerActivity::class.java
-                )
-                intentPlayerActivity.putExtra("track", adapter.tracks[position])
-                startActivity(intentPlayerActivity)
-                viewModel.updateHistory(adapter.tracks[position])
-            }
-        )
+        adapter = TracksAdapter { position ->
+            val intentPlayerActivity = Intent(
+                this@SearchActivity, PlayerActivity::class.java
+            )
+            intentPlayerActivity.putExtra("track", adapter.tracks[position])
+            startActivity(intentPlayerActivity)
+            viewModel.updateHistory(adapter.tracks[position])
+        }
         binding.recyclerView.adapter = adapter
 
         binding.clearIcon.setOnClickListener {
@@ -99,6 +93,7 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun showTracks(tracks: List<Track>) {
         binding.apply {
             msgNothingWasFound.visibility = View.GONE
@@ -116,6 +111,7 @@ class SearchActivity : AppCompatActivity() {
     private fun editTextInFocus(): Boolean = binding.inputEditText.text.isEmpty() &&
             binding.inputEditText.hasFocus()
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun showSearchHistory(tracks: List<Track>) {
 
         binding.apply {
@@ -132,6 +128,7 @@ class SearchActivity : AppCompatActivity() {
         adapter.notifyDataSetChanged()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun showLoading() {
 
         if (adapter.tracks.isNotEmpty()) {
@@ -148,7 +145,8 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun showError(errorMessage: String) {
+    @SuppressLint("NotifyDataSetChanged")
+    private fun showError() {
 
         if (adapter.tracks.isNotEmpty()) {
             adapter.tracks.clear()
@@ -164,7 +162,8 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun showEmpty(emptyMessage: String) {
+    @SuppressLint("NotifyDataSetChanged")
+    private fun showEmpty() {
 
         if (adapter.tracks.isNotEmpty()) {
             adapter.tracks.clear()
@@ -186,8 +185,8 @@ class SearchActivity : AppCompatActivity() {
             is SearchActivityState.Content ->
                 if (state.isSearchHistory) showSearchHistory(state.tracks)
                 else showTracks(state.tracks)
-            is SearchActivityState.Error -> showError(state.errorMessage)
-            is SearchActivityState.Empty -> showEmpty(state.message)
+            is SearchActivityState.Error -> showError()
+            is SearchActivityState.Empty -> showEmpty()
         }
     }
 

@@ -5,6 +5,6 @@ sealed interface MainActivityState {
     class Content : MainActivityState
 
     data class Error(
-        val errorMessage: String
+        val message: String
     ) : MainActivityState
 }

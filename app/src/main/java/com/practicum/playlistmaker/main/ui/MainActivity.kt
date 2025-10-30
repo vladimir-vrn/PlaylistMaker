@@ -3,14 +3,14 @@ package com.practicum.playlistmaker.main.ui
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.databinding.ActivityMainBinding
 import com.practicum.playlistmaker.search.ui.SearchActivity
 import com.practicum.playlistmaker.settings.ui.SettingsActivity
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: MainViewModel
+    private val viewModel by viewModel<MainViewModel>()
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,10 +18,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(
-            this,
-            MainViewModel.getFactory()
-        ).get(MainViewModel::class.java)
+        viewModel.observeState().observe(this) {
+            render(it)
+        }
 
         binding.btnSearch.setOnClickListener {
             val intentSearch = Intent(this@MainActivity, SearchActivity::class.java)
@@ -37,5 +36,9 @@ class MainActivity : AppCompatActivity() {
             val intentSettings = Intent(this@MainActivity, SettingsActivity::class.java)
             startActivity(intentSettings)
         }
+    }
+
+    private fun render(state: MainActivityState) {
+
     }
 }

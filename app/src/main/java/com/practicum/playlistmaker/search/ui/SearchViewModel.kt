@@ -1,39 +1,36 @@
 package com.practicum.playlistmaker.search.ui
 
-import android.app.Application
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.creator.Creator
+import com.practicum.playlistmaker.search.domain.SearchHistoryInteractor
 import com.practicum.playlistmaker.search.domain.Track
 import com.practicum.playlistmaker.search.domain.TracksInteractor
 
-class SearchViewModel(context: Context) : ViewModel() {
+class SearchViewModel(
+    private val tracksInteractor: TracksInteractor,
+    private val searchHistoryInteractor: SearchHistoryInteractor,
+    context: Context
+) : ViewModel() {
 
     private val stateLiveData = MutableLiveData<SearchActivityState>(
         SearchActivityState.Content(
-            emptyList<Track>(),
+            emptyList(),
             true
         )
     )
     fun observeState(): LiveData<SearchActivityState> = stateLiveData
 
-    private val tracksInteractor = Creator.provideTracksInteractor(context)
-    private val searchHistoryInteractor = Creator.provideSearchHistoryInteractor(context)
     private var lastSearchText = ""
     private val searchRunnable = Runnable { findTracks() }
     private val handler = Handler(Looper.getMainLooper())
 
-    val errorMsg = context.getString(R.string.communication_problems)
-    val emptyMsg = context.getString(R.string.nothing_was_found)
+    private val errorMsg = context.getString(R.string.communication_problems)
+    private val emptyMsg = context.getString(R.string.nothing_was_found)
 
 
     override fun onCleared() {
@@ -73,10 +70,10 @@ class SearchViewModel(context: Context) : ViewModel() {
     }
 
     fun clearHistory() {
-        searchHistoryInteractor.save(emptyList<Track>())
+        searchHistoryInteractor.save(emptyList())
         renderState(
             SearchActivityState.Content(
-                emptyList<Track>(),
+                emptyList(),
                 true
             )
         )
@@ -87,23 +84,22 @@ class SearchViewModel(context: Context) : ViewModel() {
         renderState(SearchActivityState.Loading)
 
         tracksInteractor.search(
-            lastSearchText,
-            TracksInteractor.TracksConsumer { foundTracks ->
-                when {
-                    foundTracks == null -> renderState(
-                        SearchActivityState.Error(errorMsg)
+            lastSearchText
+        ) { foundTracks ->
+            when {
+                foundTracks == null -> renderState(
+                    SearchActivityState.Error(errorMsg)
+                )
+                foundTracks.isEmpty() -> renderState(
+                    SearchActivityState.Empty(emptyMsg)
+                )
+                else -> renderState(
+                    SearchActivityState.Content(
+                        foundTracks, false
                     )
-                    foundTracks.isEmpty() -> renderState(
-                        SearchActivityState.Empty(emptyMsg)
-                    )
-                    else -> renderState(
-                        SearchActivityState.Content(
-                            foundTracks, false
-                        )
-                    )
-                }
+                )
             }
-        )
+        }
     }
 
     private fun renderState(state: SearchActivityState) {
@@ -111,11 +107,6 @@ class SearchViewModel(context: Context) : ViewModel() {
     }
 
     companion object {
-        fun getFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                SearchViewModel(this[APPLICATION_KEY] as Application)
-            }
-        }
 
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
