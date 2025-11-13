@@ -13,6 +13,7 @@ class SettingsActivity : AppCompatActivity() {
         )
     }
     private lateinit var binding: ActivitySettingsBinding
+    private var isSwtDarkThemeChangedManualMode = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +29,8 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         binding.swtDarkTheme.setOnCheckedChangeListener { switcher, checked ->
-            viewModel.switchTheme(checked)
+            if (isSwtDarkThemeChangedManualMode) viewModel.switchTheme(checked)
+            isSwtDarkThemeChangedManualMode = true
         }
 
         binding.btnShareApp.setOnClickListener {
@@ -46,6 +48,7 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun showContent(nightMode: Boolean) {
         if (binding.swtDarkTheme.isChecked != nightMode) {
+            isSwtDarkThemeChangedManualMode = false
             binding.swtDarkTheme.isChecked = nightMode
         }
     }

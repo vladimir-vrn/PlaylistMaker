@@ -12,8 +12,8 @@ class SettingsInteractorImpl(
         repository.updateThemeSetting(data)
     }
 
-    override fun switchTheme(darkTheme: Boolean) {
-        repository.switchTheme(darkTheme)
+    override fun switchTheme(nightMode: Boolean) {
+        repository.switchTheme(nightMode)
     }
 
 }

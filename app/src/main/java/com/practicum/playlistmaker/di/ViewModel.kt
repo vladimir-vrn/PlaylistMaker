@@ -1,8 +1,10 @@
 package com.practicum.playlistmaker.di
 
 import android.content.Context
+import com.practicum.playlistmaker.mediaLibrary.ui.FavoritesFragmentViewModel
 import com.practicum.playlistmaker.main.ui.MainViewModel
-import com.practicum.playlistmaker.main.ui.MediaLibraryViewModel
+import com.practicum.playlistmaker.mediaLibrary.ui.MediaLibraryViewModel
+import com.practicum.playlistmaker.mediaLibrary.ui.PlaylistsFragmentViewModel
 import com.practicum.playlistmaker.player.ui.PlayerViewModel
 import com.practicum.playlistmaker.search.domain.Track
 import com.practicum.playlistmaker.search.ui.SearchViewModel
@@ -45,5 +47,13 @@ val viewModelModule = module {
             androidContext(),
             get()
         )
+    }
+
+    viewModel {
+        FavoritesFragmentViewModel()
+    }
+
+    viewModel {
+        PlaylistsFragmentViewModel()
     }
 }
