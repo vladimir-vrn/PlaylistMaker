@@ -6,11 +6,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".main.ui.MediaLibraryActivity">
+    tools:context=".mediaLibrary.ui.MediaLibraryActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         style="@style/MediaLibraryToolbar"
         android:id="@+id/tb_media_library"
         app:title="@string/media_library" />
+
+    <com.google.android.material.tabs.TabLayout
+        style="@style/MediaLibraryTabLayout"
+        android:id="@+id/tabLayout"/>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

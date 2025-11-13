@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".mediaLibrary.ui.FavoritesFragment">
+
+    <ImageView
+        style="@style/FavoritesFragmentImg"
+        android:id="@+id/imgFavoritesMissing"
+        android:src="@drawable/ic_nothing_was_found"/>
+
+    <TextView
+        style="@style/FavoritesFragmentTxt"
+        android:id="@+id/txtFavoritesMissing"
+        android:text="@string/favorites_missing"/>
+
+</LinearLayout>

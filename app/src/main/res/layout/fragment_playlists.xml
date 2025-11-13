@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".mediaLibrary.ui.PlaylistsFragment">
+
+    <Button
+        style="@style/PlaylistsFragmentBtn"
+        android:id="@+id/btnNewPlaylist"
+        android:text="@string/playlists_add"/>
+
+    <ImageView
+        style="@style/PlaylistsFragmentImg"
+        android:id="@+id/imgPlaylistsMissing"
+        android:src="@drawable/ic_nothing_was_found"/>
+
+    <TextView
+        style="@style/PlaylistsFragmentTxt"
+        android:id="@+id/txtPlaylistsMissing"
+        android:text="@string/playlists_missing"/>
+
+</LinearLayout>

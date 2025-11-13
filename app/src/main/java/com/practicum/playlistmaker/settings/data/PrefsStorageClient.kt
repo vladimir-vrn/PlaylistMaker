@@ -26,7 +26,9 @@ class PrefsStorageClient<T>(
         return if (dataJson == null) {
             StorageClientResponse<T>(null).apply { resultCode = -1 }
         } else {
-            StorageClientResponse<T>(gson.fromJson(dataJson, type)).apply { resultCode = 200 }
+            StorageClientResponse<T>(
+                gson.fromJson(dataJson, type)
+            ).apply { resultCode = 200 }
         }
     }
 }

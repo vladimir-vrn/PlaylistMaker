@@ -47,4 +47,20 @@
     <style name="PlayerTxt" parent="PlayerTxtGeneral">
         <item name="android:textColor">@color/yp_white</item>
     </style>
+    <style name="FavoritesFragmentTxt" parent="FavoritesFragmentTxtGeneral">
+        <item name="android:textColor">@color/yp_white</item>
+    </style>
+    <style name="PlaylistsFragmentTxt" parent="PlaylistsFragmentTxtGeneral">
+        <item name="android:textColor">@color/yp_white</item>
+    </style>
+    <style name="PlaylistsFragmentBtn" parent="PlaylistsFragmentBtnGeneral">
+        <item name="android:backgroundTint">@color/yp_white</item>
+        <item name="android:textColor">@color/yp_black</item>
+    </style>
+    <style name="MediaLibraryTabText" parent="MediaLibraryTabTextGeneral">
+        <item name="android:textColor">@color/yp_white</item>
+    </style>
+    <style name="MediaLibraryTabLayout" parent="MediaLibraryTabLayoutGeneral">
+        <item name="tabIndicatorColor">@color/yp_white</item>
+    </style>
 </resources>

@@ -30,8 +30,11 @@ class SettingsViewModel(
         sharingInteractor.openSupport()
     }
 
-    fun switchTheme(darkTheme: Boolean) {
-        settingsInteractor.switchTheme(darkTheme)
+    fun switchTheme(nightMode: Boolean) {
+        stateLiveData.postValue(
+            SettingsActivityState.Content(nightMode)
+        )
+        settingsInteractor.switchTheme(nightMode)
     }
 
 }

@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.main.ui
+package com.practicum.playlistmaker.mediaLibrary.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 
 class MediaLibraryViewModel : ViewModel() {
     private val stateLiveData = MutableLiveData<MediaLibraryActivityState>(
-        MediaLibraryActivityState.Content()
+        MediaLibraryActivityState.FavoritesMissing
     )
     fun observeState(): LiveData<MediaLibraryActivityState> = stateLiveData
 }

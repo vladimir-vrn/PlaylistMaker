@@ -18,12 +18,12 @@ class SettingsRepositoryImpl(
         themeStorageClient.storeData(data)
     }
 
-    override fun switchTheme(darkTheme: Boolean) {
+    override fun switchTheme(nightMode: Boolean) {
         AppCompatDelegate.setDefaultNightMode(
-            if (darkTheme) {
+            if (nightMode) {
                 AppCompatDelegate.MODE_NIGHT_YES
             } else AppCompatDelegate.MODE_NIGHT_NO
         )
-        updateThemeSetting(ThemeSettings(darkTheme))
+        updateThemeSetting(ThemeSettings(nightMode))
     }
 }
