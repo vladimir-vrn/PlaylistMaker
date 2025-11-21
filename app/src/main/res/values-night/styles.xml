@@ -1,6 +1,4 @@
 <resources>
-    <style name="MainLayout">
-    </style>
     <style name="SettingsToolbar" parent="Toolbar">
         <item name="titleTextColor">@color/yp_white</item>
         <item name="navigationIconTint">@color/yp_white</item>
@@ -39,6 +37,8 @@
         <item name="android:textColor">@color/yp_white</item>
     </style>
     <style name="PlayerToolbar" parent="Toolbar">
+        <item name="contentInsetStartWithNavigation">64dp</item>
+        <item name="navigationIcon">@drawable/ic_left_arrow</item>
         <item name="navigationIconTint">@color/yp_white</item>
     </style>
     <style name="PlayerTxtHeading" parent="PlayerTxtHeadingGeneral">
@@ -62,5 +62,8 @@
     </style>
     <style name="MediaLibraryTabLayout" parent="MediaLibraryTabLayoutGeneral">
         <item name="tabIndicatorColor">@color/yp_white</item>
+    </style>
+    <style name="RootBottomNavigationView" parent="RootBottomNavigationViewGeneral">
+        <item name="android:background">@color/yp_black</item>
     </style>
 </resources>

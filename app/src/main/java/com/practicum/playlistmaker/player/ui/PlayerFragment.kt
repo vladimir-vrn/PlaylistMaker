@@ -1,48 +1,61 @@
 package com.practicum.playlistmaker.player.ui
 
+import android.os.Build
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
+import com.practicum.playlistmaker.databinding.FragmentPlayerBinding
 import com.practicum.playlistmaker.search.domain.Track
 import com.practicum.playlistmaker.utils.dpToPx
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-class PlayerActivity : AppCompatActivity() {
+class PlayerFragment : Fragment() {
 
     private val viewModel by viewModel<PlayerViewModel> {
         parametersOf(
-            @Suppress("DEPRECATION")
-            intent.getParcelableExtra("track")
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                requireArguments()
+                    .getParcelable(PlayerFragment.ARGS_TRACK, Track::class.java)
+            else requireArguments()
+                .getParcelable<Track>(PlayerFragment.ARGS_TRACK)
         )
     }
-    private lateinit var binding: ActivityPlayerBinding
+    private lateinit var binding: FragmentPlayerBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityPlayerBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentPlayerBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        viewModel.observeState().observe(this) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
 
-        viewModel.observePlayerState().observe(this) {
+        viewModel.observePlayerState().observe(viewLifecycleOwner) {
             binding.trackPlay.setImageResource(
                 if (it == PlayerViewModel.STATE_PLAYING) R.drawable.track_pause
                 else R.drawable.track_play
             )
         }
 
-        viewModel.observeProgressTime().observe(this) {
+        viewModel.observeProgressTime().observe(viewLifecycleOwner) {
             binding.trackPlayTime.text = it
         }
 
-        binding.tbPlayer.setNavigationOnClickListener { finish() }
+        binding.tbPlayer.setNavigationOnClickListener { findNavController().navigateUp() }
         binding.trackPlay.setOnClickListener { viewModel.onTrackPlayClicked() }
     }
 
@@ -58,7 +71,7 @@ class PlayerActivity : AppCompatActivity() {
             .placeholder(R.drawable.placeholder_512)
             .transform(
                 RoundedCorners(
-                    dpToPx(8, this)
+                    dpToPx(8, requireContext())
                 )
             )
             .into(binding.trackImage)
@@ -92,11 +105,20 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun render(state: PlayerActivityState) {
+    private fun render(state: PlayerState) {
         when (state) {
-            is PlayerActivityState.Content -> showContent(state.track)
-            is PlayerActivityState.Error -> showError(state.message)
-            is PlayerActivityState.Empty -> showError(state.message)
+            is PlayerState.Content -> showContent(state.track)
+            is PlayerState.Error -> showError(state.message)
+            is PlayerState.Empty -> showError(state.message)
+        }
+    }
+
+    companion object {
+        const val ARGS_TRACK = "track"
+        fun createArgs(track: Track): Bundle {
+            val bundle = Bundle()
+            bundle.putParcelable(ARGS_TRACK, track)
+            return bundle
         }
     }
 }

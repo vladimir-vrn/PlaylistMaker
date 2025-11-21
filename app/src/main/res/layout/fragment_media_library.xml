@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".mediaLibrary.ui.MediaLibraryActivity">
+    tools:context=".mediaLibrary.ui.MediaLibraryFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         style="@style/MediaLibraryToolbar"

@@ -1,31 +1,35 @@
 package com.practicum.playlistmaker.settings.ui
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import com.practicum.playlistmaker.databinding.ActivitySettingsBinding
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import com.practicum.playlistmaker.databinding.FragmentSettingsBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-class SettingsActivity : AppCompatActivity() {
+class SettingsFragment : Fragment() {
+
     private val viewModel by viewModel<SettingsViewModel>{
-        parametersOf(
-            this@SettingsActivity
-        )
+        parametersOf(requireContext())
     }
-    private lateinit var binding: ActivitySettingsBinding
+    private lateinit var binding: FragmentSettingsBinding
     private var isSwtDarkThemeChangedManualMode = true
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySettingsBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentSettingsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        viewModel.observeState().observe(this) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
-        }
-
-        binding.tbSettings.setNavigationOnClickListener {
-            finish()
         }
 
         binding.swtDarkTheme.setOnCheckedChangeListener { switcher, checked ->
@@ -53,7 +57,7 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
-    private fun render(state: SettingsActivityState) {
-        if (state is SettingsActivityState.Content) showContent(state.nightMode)
+    private fun render(state: SettingsState) {
+        if (state is SettingsState.Content) showContent(state.nightMode)
     }
 }

@@ -2,20 +2,20 @@ package com.practicum.playlistmaker.search.ui
 
 import com.practicum.playlistmaker.search.domain.Track
 
-sealed interface SearchActivityState {
+sealed interface SearchState {
 
-    object Loading: SearchActivityState
+    object Loading: SearchState
 
     data class Content(
         val tracks: List<Track>,
         val isSearchHistory: Boolean,
-    ) : SearchActivityState
+    ) : SearchState
 
     data class Error(
         val message: String
-    ) : SearchActivityState
+    ) : SearchState
 
     data class Empty(
         val message: String
-    ) : SearchActivityState
+    ) : SearchState
 }

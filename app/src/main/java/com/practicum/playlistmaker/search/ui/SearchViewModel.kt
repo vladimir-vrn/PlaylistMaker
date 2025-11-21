@@ -17,13 +17,13 @@ class SearchViewModel(
     context: Context
 ) : ViewModel() {
 
-    private val stateLiveData = MutableLiveData<SearchActivityState>(
-        SearchActivityState.Content(
+    private val stateLiveData = MutableLiveData<SearchState>(
+        SearchState.Content(
             emptyList(),
             true
         )
     )
-    fun observeState(): LiveData<SearchActivityState> = stateLiveData
+    fun observeState(): LiveData<SearchState> = stateLiveData
 
     private var lastSearchText = ""
     private val searchRunnable = Runnable { findTracks() }
@@ -56,7 +56,7 @@ class SearchViewModel(
     fun loadHistory() {
         handler.removeCallbacks(searchRunnable)
         renderState(
-            SearchActivityState.Content(
+            SearchState.Content(
                 searchHistoryInteractor.load(),
                 true
             )
@@ -72,7 +72,7 @@ class SearchViewModel(
     fun clearHistory() {
         searchHistoryInteractor.save(emptyList())
         renderState(
-            SearchActivityState.Content(
+            SearchState.Content(
                 emptyList(),
                 true
             )
@@ -81,20 +81,20 @@ class SearchViewModel(
 
     private fun findTracks() {
 
-        renderState(SearchActivityState.Loading)
+        renderState(SearchState.Loading)
 
         tracksInteractor.search(
             lastSearchText
         ) { foundTracks ->
             when {
                 foundTracks == null -> renderState(
-                    SearchActivityState.Error(errorMsg)
+                    SearchState.Error(errorMsg)
                 )
                 foundTracks.isEmpty() -> renderState(
-                    SearchActivityState.Empty(emptyMsg)
+                    SearchState.Empty(emptyMsg)
                 )
                 else -> renderState(
-                    SearchActivityState.Content(
+                    SearchState.Content(
                         foundTracks, false
                     )
                 )
@@ -102,7 +102,7 @@ class SearchViewModel(
         }
     }
 
-    private fun renderState(state: SearchActivityState) {
+    private fun renderState(state: SearchState) {
         stateLiveData.postValue(state)
     }
 

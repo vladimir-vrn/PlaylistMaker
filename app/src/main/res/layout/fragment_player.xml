@@ -6,12 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".player.ui.PlayerActivity">
+    tools:context=".player.ui.PlayerFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         style="@style/PlayerToolbar"
         android:id="@+id/tbPlayer"/>
-    
+
     <ScrollView
         android:id="@+id/scvMain"
         android:layout_width="match_parent"
@@ -163,7 +163,7 @@
                 tools:text="Великобритания"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-        
+
     </ScrollView>
 
     <TextView

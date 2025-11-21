@@ -1,31 +1,42 @@
 package com.practicum.playlistmaker.search.ui
 
 import android.annotation.SuppressLint
-import android.content.Intent
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.databinding.FragmentSearchBinding
+import com.practicum.playlistmaker.player.ui.PlayerFragment
 import com.practicum.playlistmaker.search.domain.Track
-import com.practicum.playlistmaker.databinding.ActivitySearchBinding
-import com.practicum.playlistmaker.player.ui.PlayerActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchActivity : AppCompatActivity() {
+class SearchFragment : Fragment() {
 
     private val viewModel by viewModel<SearchViewModel>()
-    private lateinit var binding: ActivitySearchBinding
+    private lateinit var binding: FragmentSearchBinding
     private lateinit var adapter: TracksAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
-        viewModel.observeState().observe(this) {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
 
@@ -35,14 +46,12 @@ class SearchActivity : AppCompatActivity() {
         binding.btnUpdateSearch.setOnClickListener {
             viewModel.search(binding.inputEditText.text.toString())
         }
-        binding.tbSearch.setNavigationOnClickListener { finish() }
 
         adapter = TracksAdapter { position ->
-            val intentPlayerActivity = Intent(
-                this@SearchActivity, PlayerActivity::class.java
+            findNavController().navigate(
+                R.id.action_searchFragment_to_playerFragment,
+                PlayerFragment.createArgs(adapter.tracks[position])
             )
-            intentPlayerActivity.putExtra("track", adapter.tracks[position])
-            startActivity(intentPlayerActivity)
             viewModel.updateHistory(adapter.tracks[position])
         }
         binding.recyclerView.adapter = adapter
@@ -57,7 +66,7 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s.isNullOrEmpty()) {
                     binding.clearIcon.visibility = View.GONE
-                    val imm = this@SearchActivity.getSystemService(
+                    val imm = requireContext().getSystemService(
                         INPUT_METHOD_SERVICE
                     ) as? InputMethodManager
                     imm?.hideSoftInputFromWindow(
@@ -82,14 +91,8 @@ class SearchActivity : AppCompatActivity() {
             false
         }
         binding.inputEditText.setOnFocusChangeListener { view, hasFocus ->
-            viewModel.loadHistory()
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (editTextInFocus()) {
-            viewModel.loadHistory()
+            if (hasFocus && binding.inputEditText.text.isEmpty())
+                viewModel.loadHistory()
         }
     }
 
@@ -106,10 +109,9 @@ class SearchActivity : AppCompatActivity() {
             adapter.tracks.addAll(tracks)
             adapter.notifyDataSetChanged()
         }
-    }
 
-    private fun editTextInFocus(): Boolean = binding.inputEditText.text.isEmpty() &&
-            binding.inputEditText.hasFocus()
+        if (!binding.inputEditText.hasFocus()) binding.inputEditText.requestFocus()
+    }
 
     @SuppressLint("NotifyDataSetChanged")
     private fun showSearchHistory(tracks: List<Track>) {
@@ -118,13 +120,15 @@ class SearchActivity : AppCompatActivity() {
             msgNothingWasFound.visibility = View.GONE
             msgCommunicationProblems.visibility = View.GONE
             btnClearHistory.visibility =
-                if (editTextInFocus() && tracks.isNotEmpty()) View.VISIBLE else View.GONE
+                if (binding.inputEditText.hasFocus() &&
+                    tracks.isNotEmpty()) View.VISIBLE else View.GONE
             txtHistory.visibility =
-                if (editTextInFocus() && tracks.isNotEmpty()) View.VISIBLE else View.GONE
+                if (binding.inputEditText.hasFocus() &&
+                    tracks.isNotEmpty()) View.VISIBLE else View.GONE
         }
 
         adapter.tracks.clear()
-        adapter.tracks.addAll(tracks)
+        if (binding.inputEditText.hasFocus()) adapter.tracks.addAll(tracks)
         adapter.notifyDataSetChanged()
     }
 
@@ -179,14 +183,14 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun render(state: SearchActivityState) {
+    private fun render(state: SearchState) {
         when (state) {
-            is SearchActivityState.Loading -> showLoading()
-            is SearchActivityState.Content ->
+            is SearchState.Loading -> showLoading()
+            is SearchState.Content ->
                 if (state.isSearchHistory) showSearchHistory(state.tracks)
                 else showTracks(state.tracks)
-            is SearchActivityState.Error -> showError()
-            is SearchActivityState.Empty -> showEmpty()
+            is SearchState.Error -> showError()
+            is SearchState.Empty -> showEmpty()
         }
     }
 

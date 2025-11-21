@@ -17,8 +17,8 @@ class PlayerViewModel(
     private val mediaPlayer: MediaPlayer
 ) : ViewModel() {
 
-    private var stateLiveData: MutableLiveData<PlayerActivityState>
-    fun observeState(): LiveData<PlayerActivityState> = stateLiveData
+    private var stateLiveData: MutableLiveData<PlayerState>
+    fun observeState(): LiveData<PlayerState> = stateLiveData
 
     private val playerStateLiveData = MutableLiveData(STATE_DEFAULT)
     fun observePlayerState(): LiveData<Int> = playerStateLiveData
@@ -35,16 +35,16 @@ class PlayerViewModel(
     }
 
     init {
-        stateLiveData = MutableLiveData<PlayerActivityState>(
+        stateLiveData = MutableLiveData<PlayerState>(
             when {
-                track == null -> PlayerActivityState.Error(
+                track == null -> PlayerState.Error(
                     context.getString(R.string.player_open_error_dialog_message)
                 )
                 track.trackId > 0 -> {
                     preparePlayer(track.previewUrl)
-                    PlayerActivityState.Content(track)
+                    PlayerState.Content(track)
                 }
-                else -> PlayerActivityState.Empty(
+                else -> PlayerState.Empty(
                     context.getString(R.string.player_open_error_dialog_message)
                 )
             }

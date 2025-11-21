@@ -10,7 +10,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistsFragment : Fragment() {
 
-    private val viewModel by viewModel<PlaylistsFragmentViewModel>()
+    private val viewModel by viewModel<PlaylistsViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,7 +28,7 @@ class PlaylistsFragment : Fragment() {
         }
     }
 
-    private fun render(state: PlaylistsFragmentState) {
+    private fun render(state: PlaylistsState) {
 
     }
 
