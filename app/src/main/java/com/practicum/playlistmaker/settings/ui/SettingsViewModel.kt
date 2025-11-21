@@ -11,12 +11,12 @@ class SettingsViewModel(
     private val settingsInteractor: SettingsInteractor,
 ) : ViewModel() {
 
-    private val stateLiveData = MutableLiveData<SettingsActivityState>(
-        SettingsActivityState.Content(
+    private val stateLiveData = MutableLiveData<SettingsState>(
+        SettingsState.Content(
             settingsInteractor.getThemeSettings().nightMode
         )
     )
-    fun observeState(): LiveData<SettingsActivityState> = stateLiveData
+    fun observeState(): LiveData<SettingsState> = stateLiveData
 
     fun shareApp() {
         sharingInteractor.shareApp()
@@ -32,7 +32,7 @@ class SettingsViewModel(
 
     fun switchTheme(nightMode: Boolean) {
         stateLiveData.postValue(
-            SettingsActivityState.Content(nightMode)
+            SettingsState.Content(nightMode)
         )
         settingsInteractor.switchTheme(nightMode)
     }

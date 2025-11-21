@@ -2,17 +2,17 @@ package com.practicum.playlistmaker.player.ui
 
 import com.practicum.playlistmaker.search.domain.Track
 
-sealed interface PlayerActivityState {
+sealed interface PlayerState {
 
     data class Content(
         val track: Track
-    ) : PlayerActivityState
+    ) : PlayerState
 
     data class Error(
         val message: String
-    ) : PlayerActivityState
+    ) : PlayerState
 
     data class Empty(
         val message: String
-    ) : PlayerActivityState
+    ) : PlayerState
 }

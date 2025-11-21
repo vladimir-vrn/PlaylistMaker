@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class MediaLibraryViewModel : ViewModel() {
-    private val stateLiveData = MutableLiveData<MediaLibraryActivityState>(
-        MediaLibraryActivityState.FavoritesMissing
+    private val stateLiveData = MutableLiveData<MediaLibraryState>(
+        MediaLibraryState.FavoritesMissing
     )
-    fun observeState(): LiveData<MediaLibraryActivityState> = stateLiveData
+    fun observeState(): LiveData<MediaLibraryState> = stateLiveData
 }

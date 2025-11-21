@@ -10,7 +10,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavoritesFragment : Fragment() {
 
-    private val viewModel by viewModel<FavoritesFragmentViewModel>()
+    private val viewModel by viewModel<FavoritesViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,7 +28,7 @@ class FavoritesFragment : Fragment() {
         }
     }
 
-    private fun render(state: FavoritesFragmentState) {
+    private fun render(state: FavoritesState) {
 
     }
 

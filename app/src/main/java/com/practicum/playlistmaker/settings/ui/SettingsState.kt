@@ -1,11 +1,11 @@
 package com.practicum.playlistmaker.settings.ui
 
-sealed interface SettingsActivityState {
+sealed interface SettingsState {
     data class Content(
         val nightMode: Boolean
-    ) : SettingsActivityState
+    ) : SettingsState
 
     data class Error(
         val message: String
-    ) : SettingsActivityState
+    ) : SettingsState
 }
