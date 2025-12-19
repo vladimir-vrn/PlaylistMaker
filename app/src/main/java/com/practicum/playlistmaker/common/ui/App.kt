@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.settings.ui
+package com.practicum.playlistmaker.common.ui
 
 import android.app.Application
 import android.content.res.Configuration

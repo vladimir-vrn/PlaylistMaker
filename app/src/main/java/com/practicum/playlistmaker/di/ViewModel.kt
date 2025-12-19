@@ -5,7 +5,7 @@ import com.practicum.playlistmaker.mediaLibrary.ui.FavoritesViewModel
 import com.practicum.playlistmaker.mediaLibrary.ui.MediaLibraryViewModel
 import com.practicum.playlistmaker.mediaLibrary.ui.PlaylistsViewModel
 import com.practicum.playlistmaker.player.ui.PlayerViewModel
-import com.practicum.playlistmaker.search.domain.Track
+import com.practicum.playlistmaker.common.domain.Track
 import com.practicum.playlistmaker.search.ui.SearchViewModel
 import com.practicum.playlistmaker.settings.ui.SettingsViewModel
 import org.koin.android.ext.koin.androidContext

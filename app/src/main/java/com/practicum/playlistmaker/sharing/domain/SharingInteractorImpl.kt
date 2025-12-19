@@ -1,5 +1,7 @@
 package com.practicum.playlistmaker.sharing.domain
 
+import com.practicum.playlistmaker.common.domain.EmailData
+
 class SharingInteractorImpl(
     private val externalNavigator: ExternalNavigator,
 ) : SharingInteractor {

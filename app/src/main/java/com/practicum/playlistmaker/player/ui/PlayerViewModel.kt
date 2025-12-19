@@ -2,14 +2,16 @@ package com.practicum.playlistmaker.player.ui
 
 import android.content.Context
 import android.media.MediaPlayer
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.search.domain.Track
-import com.practicum.playlistmaker.utils.timeFormatMmSs
+import com.practicum.playlistmaker.common.domain.Track
+import com.practicum.playlistmaker.common.data.timeFormatMmSs
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class PlayerViewModel(
     track: Track?,
@@ -26,13 +28,7 @@ class PlayerViewModel(
     private val progressTimeLiveData = MutableLiveData(TIMER_START_TIME)
     fun observeProgressTime(): LiveData<String> = progressTimeLiveData
 
-    private val handler = Handler(Looper.getMainLooper())
-
-    private val timerRunnable = Runnable {
-        if (playerStateLiveData.value == STATE_PLAYING) {
-            startTimerUpdate()
-        }
-    }
+    private var timerUpdateJob: Job? = null
 
     init {
         stateLiveData = MutableLiveData<PlayerState>(
@@ -89,16 +85,20 @@ class PlayerViewModel(
     }
 
     private fun startTimerUpdate() {
-        progressTimeLiveData.postValue(timeFormatMmSs(mediaPlayer.currentPosition.toLong()))
-        handler.postDelayed(timerRunnable, REFRESH_TRACK_PLAY_TIME)
+        timerUpdateJob = viewModelScope.launch {
+            while (mediaPlayer.isPlaying) {
+                delay(REFRESH_TRACK_PLAY_TIME)
+                progressTimeLiveData.postValue(timeFormatMmSs(mediaPlayer.currentPosition.toLong()))
+            }
+        }
     }
 
     private fun pauseTimer() {
-        handler.removeCallbacks(timerRunnable)
+        timerUpdateJob?.cancel()
     }
 
     private fun resetTimer() {
-        handler.removeCallbacks(timerRunnable)
+        timerUpdateJob?.cancel()
         progressTimeLiveData.postValue(TIMER_START_TIME)
     }
 
@@ -108,7 +108,7 @@ class PlayerViewModel(
         const val STATE_PREPARED = 1
         const val STATE_PLAYING = 2
         const val STATE_PAUSED = 3
-        private const val REFRESH_TRACK_PLAY_TIME = 500L
+        private const val REFRESH_TRACK_PLAY_TIME = 300L
         private const val TIMER_START_TIME = "00:00"
     }
 }
