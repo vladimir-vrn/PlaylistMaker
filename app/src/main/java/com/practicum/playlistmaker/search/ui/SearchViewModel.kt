@@ -1,15 +1,17 @@
 package com.practicum.playlistmaker.search.ui
 
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.search.domain.SearchHistoryInteractor
-import com.practicum.playlistmaker.search.domain.Track
+import com.practicum.playlistmaker.common.domain.Track
 import com.practicum.playlistmaker.search.domain.TracksInteractor
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class SearchViewModel(
     private val tracksInteractor: TracksInteractor,
@@ -17,48 +19,46 @@ class SearchViewModel(
     context: Context
 ) : ViewModel() {
 
-    private val stateLiveData = MutableLiveData<SearchState>(
-        SearchState.Content(
-            emptyList(),
-            true
-        )
-    )
+    private val stateLiveData = MutableLiveData<SearchState>(SearchState.Content())
     fun observeState(): LiveData<SearchState> = stateLiveData
 
     private var lastSearchText = ""
-    private val searchRunnable = Runnable { findTracks() }
-    private val handler = Handler(Looper.getMainLooper())
+    private var findTracksJob: Job? = null
 
     private val errorMsg = context.getString(R.string.communication_problems)
     private val emptyMsg = context.getString(R.string.nothing_was_found)
 
-
-    override fun onCleared() {
-        super.onCleared()
-        handler.removeCallbacks(searchRunnable)
-    }
-
-    fun search(searchText: String) {
+    fun search(searchText: String, searchDebounce: Boolean = true) {
         if (searchText.isNotEmpty()) {
-            handler.removeCallbacks(searchRunnable)
-            lastSearchText = searchText.trim()
-            findTracks()
-        }
-    }
-    fun searchDebounce(searchText: String) {
-        if (searchText.isNotEmpty()) {
-            handler.removeCallbacks(searchRunnable)
-            lastSearchText = searchText.trim()
-            handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+            findTracksJob?.cancel()
+            if (searchText.trim() != lastSearchText) {
+                lastSearchText = searchText.trim()
+                if (stateLiveData.value is SearchState.Content &&
+                    (stateLiveData.value as SearchState.Content).isSearchHistory)
+                    renderState(
+                        SearchState.Content(
+                            isSearchHistory = false,
+                            isInputEditTextHasFocus = true,
+                        )
+                    )
+                if (searchDebounce) findTracksJob =
+                    viewModelScope.launch {
+                        delay(SEARCH_DEBOUNCE_DELAY)
+                        findTracks()
+                    }
+                else findTracks()
+            }
         }
     }
 
     fun loadHistory() {
-        handler.removeCallbacks(searchRunnable)
+        lastSearchText = ""
+        findTracksJob?.cancel()
         renderState(
             SearchState.Content(
                 searchHistoryInteractor.load(),
-                true
+                isSearchHistory = true,
+                isInputEditTextHasFocus = true,
             )
         )
     }
@@ -73,8 +73,8 @@ class SearchViewModel(
         searchHistoryInteractor.save(emptyList())
         renderState(
             SearchState.Content(
-                emptyList(),
-                true
+                isSearchHistory = true,
+                isInputEditTextHasFocus = true,
             )
         )
     }
@@ -83,22 +83,26 @@ class SearchViewModel(
 
         renderState(SearchState.Loading)
 
-        tracksInteractor.search(
-            lastSearchText
-        ) { foundTracks ->
-            when {
-                foundTracks == null -> renderState(
-                    SearchState.Error(errorMsg)
-                )
-                foundTracks.isEmpty() -> renderState(
-                    SearchState.Empty(emptyMsg)
-                )
-                else -> renderState(
-                    SearchState.Content(
-                        foundTracks, false
-                    )
-                )
-            }
+        viewModelScope.launch {
+            tracksInteractor
+                .search(lastSearchText)
+                .collect { foundTracks ->
+                    when {
+                        foundTracks == null -> renderState(
+                            SearchState.Error(errorMsg)
+                        )
+                        foundTracks.isEmpty() -> renderState(
+                            SearchState.Empty(emptyMsg)
+                        )
+                        else -> renderState(
+                            SearchState.Content(
+                                foundTracks,
+                                isSearchHistory = false,
+                                isInputEditTextHasFocus = true,
+                            )
+                        )
+                    }
+                }
         }
     }
 

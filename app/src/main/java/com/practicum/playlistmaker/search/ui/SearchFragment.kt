@@ -15,13 +15,14 @@ import androidx.navigation.fragment.findNavController
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentSearchBinding
 import com.practicum.playlistmaker.player.ui.PlayerFragment
-import com.practicum.playlistmaker.search.domain.Track
+import com.practicum.playlistmaker.common.domain.Track
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
 
     private val viewModel by viewModel<SearchViewModel>()
-    private lateinit var binding: FragmentSearchBinding
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
     private lateinit var adapter: TracksAdapter
 
 
@@ -29,7 +30,7 @@ class SearchFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -44,7 +45,10 @@ class SearchFragment : Fragment() {
             viewModel.clearHistory()
         }
         binding.btnUpdateSearch.setOnClickListener {
-            viewModel.search(binding.inputEditText.text.toString())
+            viewModel.search(
+                binding.inputEditText.text.toString(),
+                false
+            )
         }
 
         adapter = TracksAdapter { position ->
@@ -72,10 +76,10 @@ class SearchFragment : Fragment() {
                     imm?.hideSoftInputFromWindow(
                         binding.inputEditText.windowToken, 0
                     )
-                    viewModel.loadHistory()
+                    if (binding.inputEditText.hasFocus()) viewModel.loadHistory()
                 } else {
                     binding.clearIcon.visibility = View.VISIBLE
-                    viewModel.searchDebounce(s.toString())
+                    viewModel.search(s.toString())
                 }
             }
 
@@ -85,15 +89,21 @@ class SearchFragment : Fragment() {
         binding.inputEditText.addTextChangedListener(simpleTextWatcher)
         binding.inputEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                viewModel.search(binding.inputEditText.text.toString())
-                true
+                viewModel.search(
+                    binding.inputEditText.text.toString(),
+                    false
+                )
             }
             false
         }
         binding.inputEditText.setOnFocusChangeListener { view, hasFocus ->
-            if (hasFocus && binding.inputEditText.text.isEmpty())
-                viewModel.loadHistory()
+            if (hasFocus && binding.inputEditText.text.isEmpty()) viewModel.loadHistory()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -104,13 +114,11 @@ class SearchFragment : Fragment() {
             btnClearHistory.visibility = View.GONE
             txtHistory.visibility = View.GONE
             progressBar.visibility = View.GONE
-
-            adapter.tracks.clear()
-            adapter.tracks.addAll(tracks)
-            adapter.notifyDataSetChanged()
         }
 
-        if (!binding.inputEditText.hasFocus()) binding.inputEditText.requestFocus()
+        adapter.tracks.clear()
+        adapter.tracks.addAll(tracks)
+        adapter.notifyDataSetChanged()
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -119,16 +127,15 @@ class SearchFragment : Fragment() {
         binding.apply {
             msgNothingWasFound.visibility = View.GONE
             msgCommunicationProblems.visibility = View.GONE
+            progressBar.visibility = View.GONE
             btnClearHistory.visibility =
-                if (binding.inputEditText.hasFocus() &&
-                    tracks.isNotEmpty()) View.VISIBLE else View.GONE
+                if (tracks.isNotEmpty()) View.VISIBLE else View.GONE
             txtHistory.visibility =
-                if (binding.inputEditText.hasFocus() &&
-                    tracks.isNotEmpty()) View.VISIBLE else View.GONE
+                if (tracks.isNotEmpty()) View.VISIBLE else View.GONE
         }
 
         adapter.tracks.clear()
-        if (binding.inputEditText.hasFocus()) adapter.tracks.addAll(tracks)
+        adapter.tracks.addAll(tracks)
         adapter.notifyDataSetChanged()
     }
 
@@ -186,9 +193,12 @@ class SearchFragment : Fragment() {
     private fun render(state: SearchState) {
         when (state) {
             is SearchState.Loading -> showLoading()
-            is SearchState.Content ->
+            is SearchState.Content -> {
+                if (state.isInputEditTextHasFocus && !binding.inputEditText.hasFocus())
+                    binding.inputEditText.requestFocus()
                 if (state.isSearchHistory) showSearchHistory(state.tracks)
                 else showTracks(state.tracks)
+            }
             is SearchState.Error -> showError()
             is SearchState.Empty -> showEmpty()
         }

@@ -1,3 +1,3 @@
-package com.practicum.playlistmaker.search.data
+package com.practicum.playlistmaker.common.data
 
 data class TracksSearchRequest(val expression: String)

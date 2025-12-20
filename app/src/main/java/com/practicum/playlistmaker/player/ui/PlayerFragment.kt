@@ -11,8 +11,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlayerBinding
-import com.practicum.playlistmaker.search.domain.Track
-import com.practicum.playlistmaker.utils.dpToPx
+import com.practicum.playlistmaker.common.domain.Track
+import com.practicum.playlistmaker.common.data.dpToPx
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -22,18 +22,19 @@ class PlayerFragment : Fragment() {
         parametersOf(
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
                 requireArguments()
-                    .getParcelable(PlayerFragment.ARGS_TRACK, Track::class.java)
+                    .getParcelable(ARGS_TRACK, Track::class.java)
             else requireArguments()
-                .getParcelable<Track>(PlayerFragment.ARGS_TRACK)
+                .getParcelable(ARGS_TRACK)
         )
     }
-    private lateinit var binding: FragmentPlayerBinding
+    private var _binding: FragmentPlayerBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentPlayerBinding.inflate(inflater, container, false)
+        _binding = FragmentPlayerBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -62,6 +63,11 @@ class PlayerFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         viewModel.pausePlayer()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     private fun showContent(track: Track) {
@@ -115,10 +121,6 @@ class PlayerFragment : Fragment() {
 
     companion object {
         const val ARGS_TRACK = "track"
-        fun createArgs(track: Track): Bundle {
-            val bundle = Bundle()
-            bundle.putParcelable(ARGS_TRACK, track)
-            return bundle
-        }
+        fun createArgs(track: Track) = Bundle().apply { putParcelable(ARGS_TRACK, track) }
     }
 }

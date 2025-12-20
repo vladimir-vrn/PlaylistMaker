@@ -1,8 +1,8 @@
 package com.practicum.playlistmaker.search.data
 
 import com.practicum.playlistmaker.search.domain.SearchHistoryRepository
-import com.practicum.playlistmaker.search.domain.Track
-import com.practicum.playlistmaker.settings.data.StorageClient
+import com.practicum.playlistmaker.common.domain.Track
+import com.practicum.playlistmaker.common.data.StorageClient
 
 class SearchHistoryRepositoryImpl(
     private val storageClient: StorageClient<List<Track>>

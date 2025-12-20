@@ -1,15 +1,13 @@
 package com.practicum.playlistmaker.search.domain
 
-import java.util.concurrent.Executor
+import com.practicum.playlistmaker.common.domain.Track
+import kotlinx.coroutines.flow.Flow
 
 class TracksInteractorImpl(
-    private val repository: TracksRepository,
-    private val executor: Executor
+    private val repository: TracksRepository
 ) : TracksInteractor {
 
-    override fun search(expression: String, consumer: TracksInteractor.TracksConsumer) {
-        executor.execute {
-            consumer.consume(repository.search(expression))
-        }
+    override fun search(expression: String): Flow<List<Track>?> {
+        return repository.search(expression)
     }
 }

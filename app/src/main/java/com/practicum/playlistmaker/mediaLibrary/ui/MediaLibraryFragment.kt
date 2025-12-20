@@ -5,22 +5,21 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.material.tabs.TabLayoutMediator
-import com.practicum.playlistmaker.R
+import com.google.android.material.tabs.TabLayout
 import com.practicum.playlistmaker.databinding.FragmentMediaLibraryBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MediaLibraryFragment : Fragment() {
 
     private val viewModel by viewModel<MediaLibraryViewModel>()
-    private lateinit var binding: FragmentMediaLibraryBinding
-    private lateinit var tabMediator: TabLayoutMediator
+    private var _binding: FragmentMediaLibraryBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentMediaLibraryBinding.inflate(inflater, container, false)
+        _binding = FragmentMediaLibraryBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -28,14 +27,16 @@ class MediaLibraryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.viewPager.adapter = MediaLibraryViewPagerAdapter(childFragmentManager, lifecycle)
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
 
-        tabMediator = TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-            when (position) {
-                0 -> tab.text = getString(R.string.media_library_tab_favorite_tracks)
-                1 -> tab.text = getString(R.string.media_library_tab_playlists)
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                if (binding.viewPager.currentItem != tab.position)
+                    viewModel.setCurrentItem(tab.position)
             }
-        }
-        tabMediator.attach()
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
 
         viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
@@ -44,10 +45,15 @@ class MediaLibraryFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        tabMediator.detach()
+        _binding = null
     }
 
     private fun render(state: MediaLibraryState) {
-
+        if (state is MediaLibraryState.Content) {
+            if (binding.tabLayout.selectedTabPosition != state.currentItem)
+                binding.tabLayout.getTabAt(state.currentItem)?.select()
+            if (binding.viewPager.currentItem != state.currentItem)
+                binding.viewPager.currentItem = state.currentItem
+        }
     }
 }

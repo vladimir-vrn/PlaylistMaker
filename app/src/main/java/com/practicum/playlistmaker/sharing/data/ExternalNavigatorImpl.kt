@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.net.toUri
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.sharing.domain.EmailData
+import com.practicum.playlistmaker.common.domain.EmailData
 import com.practicum.playlistmaker.sharing.domain.ExternalNavigator
 
 class ExternalNavigatorImpl(

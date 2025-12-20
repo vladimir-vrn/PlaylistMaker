@@ -1,15 +1,17 @@
-package com.practicum.playlistmaker.search.data
+package com.practicum.playlistmaker.common.data
 
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class RetrofitNetworkClient(
     private val context: Context,
     private val iTunesSearch: iTunesSearchApi
     ) : NetworkClient {
 
-    override fun doRequest(dto: Any): Response {
+    override suspend fun doRequest(dto: Any): Response {
 
         if (!isConnected()) {
             return Response().apply { resultCode = -1 }
@@ -19,10 +21,14 @@ class RetrofitNetworkClient(
             return Response().apply { resultCode = 400 }
         }
 
-        val response = iTunesSearch.search(dto.expression).execute()
-        val body = response.body()
-        return body?.apply { resultCode = response.code() } ?:
-            Response().apply { resultCode = response.code() }
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = iTunesSearch.search(dto.expression)
+                response.apply { resultCode = 200 }
+            } catch (e: Throwable) {
+                Response().apply { resultCode = 500 }
+            }
+        }
     }
 
     private fun isConnected(): Boolean {

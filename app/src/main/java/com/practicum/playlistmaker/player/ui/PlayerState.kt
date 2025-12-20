@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker.player.ui
 
-import com.practicum.playlistmaker.search.domain.Track
+import com.practicum.playlistmaker.common.domain.Track
 
 sealed interface PlayerState {
 
