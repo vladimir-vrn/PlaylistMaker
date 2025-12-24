@@ -16,6 +16,7 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentSearchBinding
 import com.practicum.playlistmaker.player.ui.PlayerFragment
 import com.practicum.playlistmaker.common.domain.Track
+import com.practicum.playlistmaker.common.ui.TracksAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
@@ -108,7 +109,9 @@ class SearchFragment : Fragment() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun showTracks(tracks: List<Track>) {
+
         binding.apply {
+            recyclerView.visibility = View.VISIBLE
             msgNothingWasFound.visibility = View.GONE
             msgCommunicationProblems.visibility = View.GONE
             btnClearHistory.visibility = View.GONE
@@ -125,6 +128,7 @@ class SearchFragment : Fragment() {
     private fun showSearchHistory(tracks: List<Track>) {
 
         binding.apply {
+            recyclerView.visibility = View.VISIBLE
             msgNothingWasFound.visibility = View.GONE
             msgCommunicationProblems.visibility = View.GONE
             progressBar.visibility = View.GONE
@@ -148,6 +152,7 @@ class SearchFragment : Fragment() {
         }
 
         binding.apply {
+            recyclerView.visibility = View.GONE
             msgNothingWasFound.visibility = View.GONE
             msgCommunicationProblems.visibility = View.GONE
             btnClearHistory.visibility = View.GONE
@@ -165,6 +170,7 @@ class SearchFragment : Fragment() {
         }
 
         binding.apply {
+            recyclerView.visibility = View.GONE
             msgNothingWasFound.visibility = View.GONE
             msgCommunicationProblems.visibility = View.VISIBLE
             btnClearHistory.visibility = View.GONE
@@ -182,6 +188,7 @@ class SearchFragment : Fragment() {
         }
 
         binding.apply {
+            recyclerView.visibility = View.GONE
             msgNothingWasFound.visibility = View.VISIBLE
             msgCommunicationProblems.visibility = View.GONE
             btnClearHistory.visibility = View.GONE

@@ -45,19 +45,9 @@ class PlayerFragment : Fragment() {
             render(it)
         }
 
-        viewModel.observePlayerState().observe(viewLifecycleOwner) {
-            binding.trackPlay.setImageResource(
-                if (it == PlayerViewModel.STATE_PLAYING) R.drawable.track_pause
-                else R.drawable.track_play
-            )
-        }
-
-        viewModel.observeProgressTime().observe(viewLifecycleOwner) {
-            binding.trackPlayTime.text = it
-        }
-
         binding.tbPlayer.setNavigationOnClickListener { findNavController().navigateUp() }
         binding.trackPlay.setOnClickListener { viewModel.onTrackPlayClicked() }
+        binding.trackAddFavourites.setOnClickListener { viewModel.onTrackAddFavourites() }
     }
 
     override fun onPause() {
@@ -70,7 +60,7 @@ class PlayerFragment : Fragment() {
         _binding = null
     }
 
-    private fun showContent(track: Track) {
+    private fun showTrackData(track: Track) {
 
         Glide.with(binding.trackImage)
             .load(track.coverArtwork)
@@ -103,19 +93,39 @@ class PlayerFragment : Fragment() {
         }
     }
 
-    private fun showError(errorMsg: String) {
+    private fun showEmpty(message: String) {
         binding.apply {
             scvMain.visibility = View.GONE
-            txtPlaceholder.text = errorMsg
+            txtPlaceholder.text = message
             txtPlaceholder.visibility = View.VISIBLE
         }
     }
 
+    private fun showError(message: String) {
+
+    }
+
     private fun render(state: PlayerState) {
         when (state) {
-            is PlayerState.Content -> showContent(state.track)
+            is PlayerState.Content -> {
+                if (state.updateTrack)
+                    showTrackData(state.track)
+                if (state.updateIsFavourite)
+                    binding.trackAddFavourites.setImageResource(
+                        if (state.isFavourite) R.drawable.track_is_favourite
+                        else R.drawable.track_add_favourites
+                    )
+                if (state.updateMediaPlayerState)
+                    binding.trackPlay.setImageResource(
+                        if (state.mediaPlayerState == PlayerViewModel.STATE_PLAYING)
+                            R.drawable.track_pause
+                        else R.drawable.track_play
+                    )
+                if (state.updateProgressTime)
+                    binding.trackPlayTime.text = state.progressTime
+            }
             is PlayerState.Error -> showError(state.message)
-            is PlayerState.Empty -> showError(state.message)
+            is PlayerState.Empty -> showEmpty(state.message)
         }
     }
 

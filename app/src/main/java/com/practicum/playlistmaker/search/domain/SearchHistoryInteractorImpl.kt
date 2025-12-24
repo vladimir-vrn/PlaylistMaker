@@ -1,12 +1,13 @@
 package com.practicum.playlistmaker.search.domain
 
 import com.practicum.playlistmaker.common.domain.Track
+import kotlinx.coroutines.flow.Flow
 
 class SearchHistoryInteractorImpl(
     private val repository: SearchHistoryRepository
 ) : SearchHistoryInteractor {
 
-    override fun load() : List<Track> {
+    override fun load() : Flow<List<Track>> {
         return repository.load()
     }
 

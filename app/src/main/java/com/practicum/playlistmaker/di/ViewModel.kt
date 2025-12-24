@@ -9,7 +9,7 @@ import com.practicum.playlistmaker.common.domain.Track
 import com.practicum.playlistmaker.search.ui.SearchViewModel
 import com.practicum.playlistmaker.settings.ui.SettingsViewModel
 import org.koin.android.ext.koin.androidContext
-import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.module.dsl.viewModel
 import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
 
@@ -36,16 +36,17 @@ val viewModelModule = module {
         MediaLibraryViewModel()
     }
 
-    viewModel { (track: Track?) ->
+    viewModel { (track: Track) ->
         PlayerViewModel(
             track,
             androidContext(),
+            get(),
             get()
         )
     }
 
     viewModel {
-        FavoritesViewModel()
+        FavoritesViewModel(get())
     }
 
     viewModel {

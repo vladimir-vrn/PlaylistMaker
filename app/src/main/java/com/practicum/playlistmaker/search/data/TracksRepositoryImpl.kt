@@ -9,7 +9,9 @@ import com.practicum.playlistmaker.common.data.timeFormatMmSs
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRepository {
+class TracksRepositoryImpl(
+    private val networkClient: NetworkClient
+) : TracksRepository {
 
     override fun search(expression: String): Flow<List<Track>?> = flow {
         val response = networkClient.doRequest(TracksSearchRequest(expression))
@@ -19,7 +21,6 @@ class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRep
                     it.trackId,
                     it.trackName,
                     it.artistName,
-                    it.trackTimeMillis,
                     timeFormatMmSs(it.trackTimeMillis),
                     it.artworkUrl100,
                     it.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"),
@@ -27,7 +28,7 @@ class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRep
                     it.releaseDate,
                     it.primaryGenreName,
                     it.country,
-                    it.previewUrl
+                    it.previewUrl,
                 )
             })
         } else {

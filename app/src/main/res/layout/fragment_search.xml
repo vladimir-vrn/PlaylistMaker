@@ -1,24 +1,28 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/search"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".search.ui.SearchFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         style="@style/SearchToolbar"
         android:id="@+id/tb_search"
-        app:title="@string/search" />
+        app:title="@string/search"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <FrameLayout
+        android:id="@+id/frlSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:background="@drawable/rounded_edittext"
         android:layout_marginVertical="@dimen/small_indentation"
-        android:layout_marginHorizontal="@dimen/standard_indentation">
+        android:layout_marginHorizontal="@dimen/standard_indentation"
+        app:layout_constraintTop_toBottomOf="@id/tb_search"
+        app:layout_constraintStart_toStartOf="parent">
 
         <EditText
             style="@style/SearchColor"
@@ -55,23 +59,37 @@
         style="@style/TxtPlaceholder"
         android:id="@+id/txtHistory"
         android:text="@string/history_txt"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/frlSearch"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <androidx.recyclerview.widget.RecyclerView
+        style="@style/TrackRecyclerView"
         android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtHistory"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintBottom_toTopOf="@+id/btnClearHistory"/>
 
     <Button
         style="@style/BtnPlaceholder"
         android:id="@+id/btnClearHistory"
         android:text="@string/clear_history"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/recyclerView"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <LinearLayout
         style="@style/LinearLayoutPlaceholder"
-        android:id="@+id/msgNothingWasFound">
+        android:id="@+id/msgNothingWasFound"
+        app:layout_constraintTop_toBottomOf="@id/tb_search"
+        app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
             style="@style/ImgPlaceholder"
@@ -85,11 +103,17 @@
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
         style="@style/SearchProgressBar"
-        android:id="@+id/progressBar" />
+        android:id="@+id/progressBar"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintTop_toBottomOf="@id/tb_search"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <LinearLayout
         style="@style/LinearLayoutPlaceholder"
-        android:id="@+id/msgCommunicationProblems">
+        android:id="@+id/msgCommunicationProblems"
+        app:layout_constraintTop_toBottomOf="@id/tb_search"
+        app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
             style="@style/ImgPlaceholder"
@@ -106,4 +130,4 @@
 
     </LinearLayout>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

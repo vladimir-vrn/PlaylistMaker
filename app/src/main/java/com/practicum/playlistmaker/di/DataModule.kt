@@ -2,6 +2,7 @@ package com.practicum.playlistmaker.di
 
 import android.content.Context
 import android.media.MediaPlayer
+import androidx.room.Room
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker.common.data.NetworkClient
@@ -15,6 +16,9 @@ import com.practicum.playlistmaker.search.domain.TracksRepository
 import com.practicum.playlistmaker.common.data.PrefsStorageClient
 import com.practicum.playlistmaker.settings.data.SettingsRepositoryImpl
 import com.practicum.playlistmaker.common.data.StorageClient
+import com.practicum.playlistmaker.common.data.db.AppDatabase
+import com.practicum.playlistmaker.mediaLibrary.data.FavoriteTracksRepositoryImpl
+import com.practicum.playlistmaker.mediaLibrary.domain.FavoriteTracksRepository
 import com.practicum.playlistmaker.settings.domain.SettingsRepository
 import com.practicum.playlistmaker.settings.domain.ThemeSettings
 import com.practicum.playlistmaker.sharing.data.ExternalNavigatorImpl
@@ -29,8 +33,10 @@ import kotlin.collections.List
 
 val dataModule = module {
 
-    single<TracksRepository> {
-        TracksRepositoryImpl(get())
+    factory<TracksRepository> {
+        TracksRepositoryImpl(
+            get()
+        )
     }
 
     single<NetworkClient> {
@@ -48,7 +54,7 @@ val dataModule = module {
             .create<iTunesSearchApi>()
     }
 
-    single<SearchHistoryRepository> {
+    factory<SearchHistoryRepository> {
         SearchHistoryRepositoryImpl(
             get<StorageClient<List<Track>>>(
                 named("searchHistoryStorage")
@@ -67,7 +73,7 @@ val dataModule = module {
         )
     }
 
-    single<SettingsRepository> {
+    factory<SettingsRepository> {
         SettingsRepositoryImpl(
             get<StorageClient<ThemeSettings>>(
                 named("themeSettingsStorage")
@@ -97,11 +103,23 @@ val dataModule = module {
         Gson()
     }
 
-    single<ExternalNavigator> { params ->
+    factory<ExternalNavigator> { params ->
         ExternalNavigatorImpl(params[0])
     }
 
     factory {
         MediaPlayer()
+    }
+
+    single {
+        Room.databaseBuilder(
+            androidContext(),
+            AppDatabase::class.java,
+            "database.db")
+            .build()
+    }
+
+    single<FavoriteTracksRepository> {
+        FavoriteTracksRepositoryImpl(get())
     }
 }
