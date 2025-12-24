@@ -42,10 +42,10 @@ class SearchViewModel(
                         )
                     )
                 if (searchDebounce) findTracksJob =
-                    viewModelScope.launch {
-                        delay(SEARCH_DEBOUNCE_DELAY)
-                        findTracks()
-                    }
+                        viewModelScope.launch {
+                            delay(SEARCH_DEBOUNCE_DELAY)
+                            findTracks()
+                        }
                 else findTracks()
             }
         }
@@ -54,19 +54,31 @@ class SearchViewModel(
     fun loadHistory() {
         lastSearchText = ""
         findTracksJob?.cancel()
-        renderState(
-            SearchState.Content(
-                searchHistoryInteractor.load(),
-                isSearchHistory = true,
-                isInputEditTextHasFocus = true,
-            )
-        )
+        viewModelScope.launch {
+            searchHistoryInteractor
+                .load()
+                .collect { foundTracks ->
+                    renderState(
+                        SearchState.Content(
+                            foundTracks,
+                            isSearchHistory = true,
+                            isInputEditTextHasFocus = true,
+                        )
+                    )
+                }
+        }
     }
 
     fun updateHistory(track: Track) {
-        val tracks = searchHistoryInteractor.load().toMutableList()
-        searchHistoryInteractor.update(track, tracks)
-        searchHistoryInteractor.save(tracks)
+        viewModelScope.launch {
+            searchHistoryInteractor
+                .load()
+                .collect { foundTracks ->
+                    val tracks = foundTracks.toMutableList()
+                    searchHistoryInteractor.update(track, tracks)
+                    searchHistoryInteractor.save(tracks)
+                }
+        }
     }
 
     fun clearHistory() {
