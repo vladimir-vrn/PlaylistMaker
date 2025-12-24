@@ -15,19 +15,19 @@ import org.koin.dsl.module
 
 val domainModule = module {
 
-    single<TracksInteractor> {
+    factory<TracksInteractor> {
         TracksInteractorImpl(get())
     }
 
-    single<SearchHistoryInteractor> {
+    factory<SearchHistoryInteractor> {
         SearchHistoryInteractorImpl(get())
     }
 
-    single<SettingsInteractor> {
+    factory<SettingsInteractor> {
         SettingsInteractorImpl(get())
     }
 
-    single<SharingInteractor> { params ->
+    factory<SharingInteractor> { params ->
         SharingInteractorImpl(
             get {
                 parametersOf(params[0])
@@ -35,7 +35,7 @@ val domainModule = module {
         )
     }
 
-    single<FavoriteTracksInteractor> {
+    factory<FavoriteTracksInteractor> {
         FavoriteTracksInteractorImpl(get())
     }
 

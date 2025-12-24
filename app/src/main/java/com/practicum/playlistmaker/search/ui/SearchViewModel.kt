@@ -42,10 +42,10 @@ class SearchViewModel(
                         )
                     )
                 if (searchDebounce) findTracksJob =
-                        viewModelScope.launch {
-                            delay(SEARCH_DEBOUNCE_DELAY)
-                            findTracks()
-                        }
+                    viewModelScope.launch {
+                        delay(SEARCH_DEBOUNCE_DELAY)
+                        findTracks()
+                    }
                 else findTracks()
             }
         }

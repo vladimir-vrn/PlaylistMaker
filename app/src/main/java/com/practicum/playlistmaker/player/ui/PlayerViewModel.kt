@@ -27,25 +27,40 @@ class PlayerViewModel(
     private var timerUpdateJob: Job? = null
 
     init {
-        stateLiveData = MutableLiveData<PlayerState>(
-            when {
-                track.trackId > 0 -> {
-                    preparePlayer(track.previewUrl)
-                    PlayerState.Content(
-                        track,
-                        isFavourite = track.isFavorite,
-                        STATE_DEFAULT,
-                        TIMER_START_TIME,
-                        updateTrack = true,
-                        updateIsFavourite = true,
-                        updateMediaPlayerState = false,
-                        updateProgressTime = true,
-                    )
-                }
-                else -> PlayerState.Empty(
-                    context.getString(R.string.player_open_error_dialog_message)
+        if (track.trackId > 0) {
+            stateLiveData = MutableLiveData<PlayerState>(
+                PlayerState.Content(
+                    track,
+                    isFavourite = false,
+                    STATE_DEFAULT,
+                    TIMER_START_TIME,
+                    updateTrack = true,
+                    updateIsFavourite = true,
+                    updateMediaPlayerState = false,
+                    updateProgressTime = true,
                 )
+            )
+            viewModelScope.launch {
+                favoriteTracksInteractor.
+                findTrack(track.trackId)
+                    .collect { foundTracks ->
+                        if (foundTracks.isNotEmpty())
+                            stateLiveData.postValue(
+                                (stateLiveData.value as PlayerState.Content).copy(
+                                    isFavourite = true,
+                                    updateTrack = false,
+                                    updateIsFavourite = true,
+                                    updateMediaPlayerState = false,
+                                    updateProgressTime = false,
+                                )
+                            )
+                    }
             }
+            preparePlayer(track.previewUrl)
+        } else stateLiveData = MutableLiveData<PlayerState>(
+            PlayerState.Empty(
+                context.getString(R.string.player_open_error_dialog_message)
+            )
         )
     }
 

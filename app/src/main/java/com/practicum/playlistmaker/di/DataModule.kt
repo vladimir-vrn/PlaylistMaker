@@ -33,9 +33,8 @@ import kotlin.collections.List
 
 val dataModule = module {
 
-    single<TracksRepository> {
+    factory<TracksRepository> {
         TracksRepositoryImpl(
-            get(),
             get()
         )
     }
@@ -55,12 +54,11 @@ val dataModule = module {
             .create<iTunesSearchApi>()
     }
 
-    single<SearchHistoryRepository> {
+    factory<SearchHistoryRepository> {
         SearchHistoryRepositoryImpl(
             get<StorageClient<List<Track>>>(
                 named("searchHistoryStorage")
-            ),
-            get()
+            )
         )
     }
 
@@ -75,7 +73,7 @@ val dataModule = module {
         )
     }
 
-    single<SettingsRepository> {
+    factory<SettingsRepository> {
         SettingsRepositoryImpl(
             get<StorageClient<ThemeSettings>>(
                 named("themeSettingsStorage")
@@ -105,7 +103,7 @@ val dataModule = module {
         Gson()
     }
 
-    single<ExternalNavigator> { params ->
+    factory<ExternalNavigator> { params ->
         ExternalNavigatorImpl(params[0])
     }
 

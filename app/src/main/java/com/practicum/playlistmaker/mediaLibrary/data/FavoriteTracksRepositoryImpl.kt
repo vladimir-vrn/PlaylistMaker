@@ -28,18 +28,16 @@ class FavoriteTracksRepositoryImpl(
                     it.primaryGenreName,
                     it.country,
                     it.previewUrl,
-                    true
                 )
             }
         )
     }
 
-    override suspend fun getTrackIds(): List<Long> {
-        return appDatabase.tracksDao().getTrackIds()
+    override fun findTrack(trackId: Long): Flow<List<Long>> = flow {
+        emit(appDatabase.tracksDao().findTrack(trackId))
     }
 
     override suspend fun insertTrack(track: Track) {
-        appDatabase.queryExecutor
         appDatabase.tracksDao().insertTrack(
             TrackEntity(
                 track.trackId,

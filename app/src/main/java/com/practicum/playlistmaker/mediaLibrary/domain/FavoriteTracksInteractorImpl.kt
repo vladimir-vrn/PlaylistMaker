@@ -11,6 +11,10 @@ class FavoriteTracksInteractorImpl(
         return repository.getFavoriteTracks()
     }
 
+    override fun findTrack(trackId: Long): Flow<List<Long>> {
+        return repository.findTrack(trackId)
+    }
+
     override suspend fun insertTrack(track: Track) {
         repository.insertTrack(track)
     }

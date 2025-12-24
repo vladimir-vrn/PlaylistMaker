@@ -7,7 +7,7 @@ interface FavoriteTracksRepository {
 
     fun getFavoriteTracks(): Flow<List<Track>>
 
-    suspend fun getTrackIds(): List<Long>
+    fun findTrack(trackId: Long): Flow<List<Long>>
 
     suspend fun insertTrack(track: Track)
 
