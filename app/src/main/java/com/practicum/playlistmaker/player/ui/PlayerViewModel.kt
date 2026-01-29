@@ -10,15 +10,18 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.common.domain.Track
 import com.practicum.playlistmaker.common.data.timeFormatMmSs
 import com.practicum.playlistmaker.mediaLibrary.domain.FavoriteTracksInteractor
+import com.practicum.playlistmaker.mediaLibrary.domain.PlaylistsInteractor
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
 
 class PlayerViewModel(
     private val track: Track,
     context: Context,
     private val mediaPlayer: MediaPlayer,
-    private val favoriteTracksInteractor: FavoriteTracksInteractor
+    private val favoriteTracksInteractor: FavoriteTracksInteractor,
+    private val playlistsInteractor: PlaylistsInteractor,
 ) : ViewModel() {
 
     private var stateLiveData: MutableLiveData<PlayerState>
@@ -28,6 +31,7 @@ class PlayerViewModel(
 
     init {
         if (track.trackId > 0) {
+
             stateLiveData = MutableLiveData<PlayerState>(
                 PlayerState.Content(
                     track,
@@ -38,25 +42,21 @@ class PlayerViewModel(
                     updateIsFavourite = true,
                     updateMediaPlayerState = false,
                     updateProgressTime = true,
+                    updatePlayLists = true,
+                    playLists = emptyList(),
                 )
             )
+
             viewModelScope.launch {
-                favoriteTracksInteractor.
-                findTrack(track.trackId)
-                    .collect { foundTracks ->
-                        if (foundTracks.isNotEmpty())
-                            stateLiveData.postValue(
-                                (stateLiveData.value as PlayerState.Content).copy(
-                                    isFavourite = true,
-                                    updateTrack = false,
-                                    updateIsFavourite = true,
-                                    updateMediaPlayerState = false,
-                                    updateProgressTime = false,
-                                )
-                            )
-                    }
+                stateLiveData.postValue(
+                    (stateLiveData.value as PlayerState.Content).copy(
+                        isFavourite = favoriteTracksInteractor.findTrack(track.trackId).single(),
+                        playLists = playlistsInteractor.getPlaylists().single(),
+                    )
+                )
             }
             preparePlayer(track.previewUrl)
+
         } else stateLiveData = MutableLiveData<PlayerState>(
             PlayerState.Empty(
                 context.getString(R.string.player_open_error_dialog_message)
@@ -87,10 +87,6 @@ class PlayerViewModel(
         stateLiveData.postValue(
             curState.copy(
                 isFavourite = !curState.isFavourite,
-                updateTrack = false,
-                updateIsFavourite = true,
-                updateMediaPlayerState = false,
-                updateProgressTime = false,
             )
         )
     }
@@ -102,10 +98,7 @@ class PlayerViewModel(
             stateLiveData.postValue(
                 (stateLiveData.value as PlayerState.Content).copy(
                     mediaPlayerState = STATE_PREPARED,
-                    updateTrack = false,
-                    updateIsFavourite = false,
                     updateMediaPlayerState = true,
-                    updateProgressTime = false,
                 )
             )
         }
@@ -113,10 +106,7 @@ class PlayerViewModel(
             stateLiveData.postValue(
                 (stateLiveData.value as PlayerState.Content).copy(
                     mediaPlayerState = STATE_PREPARED,
-                    updateTrack = false,
-                    updateIsFavourite = false,
                     updateMediaPlayerState = true,
-                    updateProgressTime = false,
                 )
             )
             resetTimer()
@@ -128,10 +118,6 @@ class PlayerViewModel(
         stateLiveData.postValue(
             (stateLiveData.value as PlayerState.Content).copy(
                 mediaPlayerState = STATE_PLAYING,
-                updateTrack = false,
-                updateIsFavourite = false,
-                updateMediaPlayerState = true,
-                updateProgressTime = false,
             )
         )
         startTimerUpdate()
@@ -143,10 +129,6 @@ class PlayerViewModel(
         stateLiveData.postValue(
             (stateLiveData.value as PlayerState.Content).copy(
                 mediaPlayerState = STATE_PAUSED,
-                updateTrack = false,
-                updateIsFavourite = false,
-                updateMediaPlayerState = true,
-                updateProgressTime = false,
             )
         )
     }
@@ -158,10 +140,6 @@ class PlayerViewModel(
                 stateLiveData.postValue(
                     (stateLiveData.value as PlayerState.Content).copy(
                         progressTime = timeFormatMmSs(mediaPlayer.currentPosition.toLong()),
-                        updateTrack = false,
-                        updateIsFavourite = false,
-                        updateMediaPlayerState = false,
-                        updateProgressTime = true,
                     )
                 )
             }
@@ -177,12 +155,33 @@ class PlayerViewModel(
         stateLiveData.postValue(
             (stateLiveData.value as PlayerState.Content).copy(
                 progressTime = TIMER_START_TIME,
-                updateTrack = false,
-                updateIsFavourite = false,
-                updateMediaPlayerState = false,
-                updateProgressTime = true,
             )
         )
+    }
+
+    fun updatePlayLists() {
+        viewModelScope.launch {
+            stateLiveData.postValue(
+                (stateLiveData.value as PlayerState.Content).copy(
+                    playLists = playlistsInteractor.getPlaylists().single(),
+                )
+            )
+        }
+    }
+
+    fun insertTrackToPlaylist(track: Track, playListId: Int) {
+        viewModelScope.launch {
+            playlistsInteractor.insertTrack(track, playListId)
+            stateLiveData.postValue(
+                (stateLiveData.value as PlayerState.Content).copy(
+                    playLists = playlistsInteractor.getPlaylists().single(),
+                )
+            )
+        }
+    }
+
+    fun getCurTrack(): Track {
+        return (stateLiveData.value as PlayerState.Content).track
     }
 
     companion object {

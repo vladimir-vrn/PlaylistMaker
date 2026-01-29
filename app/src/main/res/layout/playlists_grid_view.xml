@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ImageView
+        style="@style/PlayListCoverGrid"
+        android:id="@+id/imgPlayListCoverGrid"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        style="@style/PlayListTextGrid"
+        android:id="@+id/txtNameGrid"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintTop_toBottomOf="@id/imgPlayListCoverGrid"
+        app:layout_constraintStart_toStartOf="@id/imgPlayListCoverGrid"
+        app:layout_constraintEnd_toEndOf="@id/imgPlayListCoverGrid"
+        tools:text="Нилето"/>
+
+    <TextView
+        style="@style/PlayListTextGrid"
+        android:id="@+id/txtNumberTracksGrid"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintTop_toBottomOf="@id/txtNameGrid"
+        app:layout_constraintStart_toStartOf="@id/txtNameGrid"
+        app:layout_constraintEnd_toEndOf="@id/imgPlayListCoverGrid"
+        tools:text="10 треков"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

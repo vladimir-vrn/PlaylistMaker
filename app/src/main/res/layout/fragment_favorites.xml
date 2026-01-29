@@ -13,12 +13,12 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
     <ImageView
-        style="@style/FavoritesFragmentImg"
+        style="@style/FavoritesImg"
         android:id="@+id/imgFavoritesMissing"
         android:src="@drawable/ic_nothing_was_found"/>
 
     <TextView
-        style="@style/FavoritesFragmentTxt"
+        style="@style/FavoritesTxt"
         android:id="@+id/txtFavoritesMissing"
         android:text="@string/favorites_missing"/>
 

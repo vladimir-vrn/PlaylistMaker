@@ -7,7 +7,6 @@ import androidx.room.PrimaryKey
 data class TrackEntity(
     @PrimaryKey
     val trackId: Long,
-    val id: Long,
     val name: String,
     val artistName: String,
     val collectionName: String,

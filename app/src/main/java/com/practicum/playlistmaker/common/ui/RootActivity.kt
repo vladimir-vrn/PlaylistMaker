@@ -22,7 +22,13 @@ class RootActivity : AppCompatActivity() {
 
         binding.bottomNavigationView.setupWithNavController(navController)
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            binding.bottomNavigationView.isVisible = destination.id != R.id.playerFragment
+            setVisibilityBottomNavigationView(
+                destination.id !in listOf(R.id.playerFragment, R.id.playlistFragment)
+            )
         }
+    }
+
+    fun setVisibilityBottomNavigationView(isVisible: Boolean) {
+        binding.bottomNavigationView.isVisible = isVisible
     }
 }
