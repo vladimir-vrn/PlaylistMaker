@@ -13,6 +13,7 @@ import androidx.room.RoomDatabase
 )
 abstract class AppDatabase : RoomDatabase(){
 
+    abstract fun tracksDao(): TracksDao
     abstract fun playlistsDao(): PlaylistsDao
 
 }

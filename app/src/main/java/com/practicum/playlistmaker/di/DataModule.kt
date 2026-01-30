@@ -3,8 +3,6 @@ package com.practicum.playlistmaker.di
 import android.content.Context
 import android.media.MediaPlayer
 import androidx.room.Room
-import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker.common.data.NetworkClient
@@ -19,7 +17,8 @@ import com.practicum.playlistmaker.common.data.PrefsStorageClient
 import com.practicum.playlistmaker.settings.data.SettingsRepositoryImpl
 import com.practicum.playlistmaker.common.data.StorageClient
 import com.practicum.playlistmaker.common.data.db.AppDatabase
-import com.practicum.playlistmaker.common.data.db.PlaylistEntity
+import com.practicum.playlistmaker.common.data.db.PlaylistsDao
+import com.practicum.playlistmaker.common.data.db.TracksDao
 import com.practicum.playlistmaker.mediaLibrary.data.FavoriteTracksRepositoryImpl
 import com.practicum.playlistmaker.mediaLibrary.data.PlaylistsRepositoryImpl
 import com.practicum.playlistmaker.mediaLibrary.domain.FavoriteTracksRepository
@@ -121,13 +120,15 @@ val dataModule = module {
             androidContext(),
             AppDatabase::class.java,
             "database.db")
-            .addCallback(object : RoomDatabase.Callback() {
-                override fun onCreate(db: SupportSQLiteDatabase) {
-                    super.onCreate(db)
-                    db.execSQL(PlaylistEntity.getSqlQueryInitFavorites(androidContext()))
-                }
-            })
             .build()
+    }
+
+    single<TracksDao> {
+        get<AppDatabase>().tracksDao()
+    }
+
+    single<PlaylistsDao> {
+        get<AppDatabase>().playlistsDao()
     }
 
     single<FavoriteTracksRepository> {

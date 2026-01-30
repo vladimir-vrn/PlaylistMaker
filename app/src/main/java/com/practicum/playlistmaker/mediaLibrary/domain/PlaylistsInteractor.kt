@@ -9,9 +9,5 @@ interface PlaylistsInteractor {
 
     suspend fun insertPlayList(playList: PlayList)
 
-    suspend fun deletePlayList(playListId: Int)
-
-    fun findTrack(trackId: Long, playListId: Int): Flow<Boolean>
-
     suspend fun insertTrack(track: Track, playListId: Int)
 }

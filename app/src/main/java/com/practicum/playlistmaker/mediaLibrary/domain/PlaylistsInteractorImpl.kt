@@ -15,14 +15,6 @@ class PlaylistsInteractorImpl(
         repository.insertPlayList(playList)
     }
 
-    override suspend fun deletePlayList(playListId: Int) {
-        repository.deletePlayList(playListId)
-    }
-
-    override fun findTrack(trackId: Long, playListId: Int): Flow<Boolean> {
-        return repository.findTrack(trackId, playListId)
-    }
-
     override suspend fun insertTrack(track: Track, playListId: Int) {
         repository.insertTrack(track, playListId)
     }
