@@ -1,24 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/playlists"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".mediaLibrary.ui.PlaylistsFragment">
 
     <Button
-        style="@style/PlaylistsFragmentBtn"
+        style="@style/PlaylistsBtn"
         android:id="@+id/btnNewPlaylist"
-        android:text="@string/playlists_add"/>
+        android:text="@string/playlists_new"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewPlaylists"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="@dimen/standard_indentation"
+        android:layout_marginBottom="8dp"
+        android:visibility="visible"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintBottom_toTopOf="@id/btnPlaylistCreated"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnNewPlaylist"
+        app:layout_constraintWidth_max="700dp" />
+
+    <Button
+        android:id="@+id/btnPlaylistCreated"
+        style="@style/PlaylistsBtnPlaylistCreated"
+        android:text="@string/playlist_was_created_successfully"
+        android:visibility="gone"
+        android:enabled="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/recyclerViewPlaylists" />
 
     <ImageView
-        style="@style/PlaylistsFragmentImg"
         android:id="@+id/imgPlaylistsMissing"
-        android:src="@drawable/ic_nothing_was_found"/>
+        style="@style/PlaylistsImg"
+        android:src="@drawable/ic_nothing_was_found"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnNewPlaylist"
+        app:layout_constraintBottom_toTopOf="@+id/txtPlaylistsMissing"/>
 
     <TextView
-        style="@style/PlaylistsFragmentTxt"
         android:id="@+id/txtPlaylistsMissing"
-        android:text="@string/playlists_missing"/>
+        style="@style/PlaylistsTxt"
+        android:text="@string/playlists_missing"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imgPlaylistsMissing"/>
 
-</LinearLayout>
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/msgMissingPlaylists"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="imgPlaylistsMissing, txtPlaylistsMissing" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

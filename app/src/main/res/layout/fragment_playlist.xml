@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/playlist"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".mediaLibrary.ui.PlaylistFragment">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        style="@style/PlayListToolbar"
+        android:id="@+id/tbPlayList"
+        app:title="@string/playlists_new"/>
+
+    <ScrollView
+        android:id="@+id/scvMainPlayList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/colMainPlayList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+
+            <ImageView
+                android:id="@+id/imgPlayListCover"
+                style="@style/PlayListCover"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/PlayListTextInputLayout"
+                android:id="@+id/tilName"
+                android:hint="@string/playlist_name_txt"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imgPlayListCover">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/PlayListTextInputEditText"
+                    android:id="@+id/tieName"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/PlayListTextInputLayout"
+                android:id="@+id/tilDescription"
+                android:hint="@string/playlist_description_txt"
+                android:layout_marginTop="@dimen/standard_indentation"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tilName">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/PlayListTextInputEditText"
+                    android:id="@+id/tieDescription"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/btnCreatePlayList"
+                style="@style/PlayListBtn"
+                android:text="@string/playlist_create_btn"
+                android:enabled="false"
+                app:layout_constraintVertical_bias="100"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tilDescription"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</LinearLayout>

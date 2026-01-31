@@ -5,7 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import com.google.android.material.tabs.TabLayout
+import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentMediaLibraryBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -41,11 +45,24 @@ class MediaLibraryFragment : Fragment() {
         viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
+
+        binding.tbMediaLibrary.setNavigationOnClickListener {
+            binding.tbMediaLibrary.navigationIcon = null
+            setFragmentResult(
+                PlaylistsFragment.GO_BACK_MEDIA_LIBRARY_KEY,
+                bundleOf(PlaylistsFragment.GO_BACK_MEDIA_LIBRARY_KEY_DATA to true)
+            )
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    fun showArrow() {
+        binding.tbMediaLibrary.navigationIcon =
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_left_arrow)
     }
 
     private fun render(state: MediaLibraryState) {

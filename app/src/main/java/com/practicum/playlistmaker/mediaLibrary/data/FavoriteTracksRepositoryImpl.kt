@@ -1,7 +1,7 @@
 package com.practicum.playlistmaker.mediaLibrary.data
 
-import com.practicum.playlistmaker.common.data.db.AppDatabase
 import com.practicum.playlistmaker.common.data.db.TrackEntity
+import com.practicum.playlistmaker.common.data.db.TracksDao
 import com.practicum.playlistmaker.common.domain.Track
 import com.practicum.playlistmaker.mediaLibrary.domain.FavoriteTracksRepository
 import kotlinx.coroutines.flow.Flow
@@ -9,13 +9,12 @@ import kotlinx.coroutines.flow.flow
 import kotlin.Long
 
 class FavoriteTracksRepositoryImpl(
-    private val appDatabase: AppDatabase
+    private val tracksDao: TracksDao
 ) : FavoriteTracksRepository {
 
-    override fun getFavoriteTracks(): Flow<List<Track>> = flow {
-        val tracksEntity = appDatabase.tracksDao().getTracks()
+    override fun getTracks(): Flow<List<Track>> = flow {
         emit(
-            tracksEntity.map {
+            tracksDao.getTracks().map {
                 Track(
                     it.trackId,
                     it.name,
@@ -33,15 +32,15 @@ class FavoriteTracksRepositoryImpl(
         )
     }
 
-    override fun findTrack(trackId: Long): Flow<List<Long>> = flow {
-        emit(appDatabase.tracksDao().findTrack(trackId))
+    override fun findTrack(trackId: Long): Flow<Boolean> = flow {
+        emit(tracksDao.findTrack(trackId).isNotEmpty())
     }
 
     override suspend fun insertTrack(track: Track) {
-        appDatabase.tracksDao().insertTrack(
+        tracksDao.insertTrack(
             TrackEntity(
                 track.trackId,
-                appDatabase.tracksDao().getMaxId()[0] + 1,
+                System.currentTimeMillis(),
                 track.trackName,
                 track.artistName,
                 track.collectionName,
@@ -56,8 +55,6 @@ class FavoriteTracksRepositoryImpl(
     }
 
     override suspend fun deleteTrack(trackId: Long) {
-        appDatabase.tracksDao().deleteTrack(trackId)
+        tracksDao.deleteTrack(trackId)
     }
-
-
 }

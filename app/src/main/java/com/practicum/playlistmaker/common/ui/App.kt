@@ -27,7 +27,9 @@ class App : Application(), KoinComponent {
 
         val settingsInteractor by inject<SettingsInteractor>()
         val themeSettings = settingsInteractor.getThemeSettings()
-        if (themeSettings.nightMode != ((resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES)) {
+        if (themeSettings.nightMode !=
+            ((resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) ==
+                    Configuration.UI_MODE_NIGHT_YES)) {
             settingsInteractor.switchTheme(themeSettings.nightMode)
         }
     }

@@ -29,7 +29,7 @@
         <item name="android:textColor">@color/yp_white</item>
         <item name="android:textSize">@dimen/other_text_size</item>
     </style>
-    <style name="BtnPlaceholder" parent="BtnPlaceholderGeneral">
+    <style name="BtnPlaceholder" parent="BtnGeneral">
         <item name="android:backgroundTint">@color/yp_white</item>
         <item name="android:textColor">@color/yp_black</item>
     </style>
@@ -47,15 +47,23 @@
     <style name="PlayerTxt" parent="PlayerTxtGeneral">
         <item name="android:textColor">@color/yp_white</item>
     </style>
-    <style name="FavoritesFragmentTxt" parent="FavoritesFragmentTxtGeneral">
+    <style name="FavoritesTxt" parent="FavoritesTxtGeneral">
         <item name="android:textColor">@color/yp_white</item>
     </style>
-    <style name="PlaylistsFragmentTxt" parent="PlaylistsFragmentTxtGeneral">
+    <style name="PlaylistsTxt" parent="PlaylistsTxtGeneral">
         <item name="android:textColor">@color/yp_white</item>
     </style>
-    <style name="PlaylistsFragmentBtn" parent="PlaylistsFragmentBtnGeneral">
+    <style name="PlaylistsBtn" parent="BtnGeneral">
         <item name="android:backgroundTint">@color/yp_white</item>
         <item name="android:textColor">@color/yp_black</item>
+    </style>
+    <style name="PlaylistsBtnPlaylistCreated" parent="PlaylistsBtn">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_marginHorizontal">8dp</item>
+        <item name="android:layout_marginBottom">@dimen/standard_indentation</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="cornerRadius">0dp</item>
     </style>
     <style name="MediaLibraryTabText" parent="MediaLibraryTabTextGeneral">
         <item name="android:textColor">@color/yp_white</item>
@@ -65,5 +73,34 @@
     </style>
     <style name="RootBottomNavigationView" parent="RootBottomNavigationViewGeneral">
         <item name="android:background">@color/yp_black</item>
+    </style>
+    <style name="PlayListToolbar" parent="PlayListToolbarGeneral">
+        <item name="navigationIconTint">@color/yp_white</item>
+        <item name="titleTextColor">@color/yp_white</item>
+    </style>
+    <style name="PlayListTextInputLayout" parent="PlayListTextInputLayoutGeneral">
+        <item name="hintTextColor">@color/yp_white</item>
+        <item name="android:textColorHint">@color/yp_white</item>
+        <item name="cursorColor">@color/yp_white</item>
+    </style>
+    <style name="PlayListTextInputEditText" parent="PlayListTextInputEditTextGeneral">
+        <item name="android:textColor">@color/yp_white</item>
+    </style>
+    <style name="PlayListTextGrid" parent="PlayListTextGridGeneral">
+        <item name="android:textColor">@color/yp_white</item>
+    </style>
+    <style name="PlayListTextName" parent="PlayListTextGeneral">
+        <item name="android:layout_marginTop">14dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="PlayListTextNumberTracks" parent="PlayListTextGeneral">
+        <item name="android:textSize">11sp</item>
+    </style>
+    <style name="BottomSheetBtn" parent="BtnGeneral">
+        <item name="android:backgroundTint">@color/yp_white</item>
+        <item name="android:textColor">@color/yp_black</item>
+    </style>
+    <style name="BottomSheetText" parent="BottomSheetTextGeneral">
+        <item name="android:textColor">@color/yp_white</item>
     </style>
 </resources>

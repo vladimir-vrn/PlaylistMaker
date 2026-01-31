@@ -8,10 +8,7 @@ import androidx.room.Query
 @Dao
 interface TracksDao {
 
-    @Query("SELECT IIF(MAX(id) IS NULL, 0, MAX(id)) as maxId FROM tracks")
-    suspend fun getMaxId(): List<Long>
-
-    @Query("SELECT id from tracks WHERE trackId = :trackId")
+    @Query("SELECT trackId from tracks WHERE trackId = :trackId")
     suspend fun findTrack(trackId: Long): List<Long>
 
     @Insert(entity = TrackEntity::class, onConflict = OnConflictStrategy.REPLACE)
@@ -20,6 +17,6 @@ interface TracksDao {
     @Query("DELETE from tracks WHERE trackId = :trackId")
     suspend fun deleteTrack(trackId: Long)
 
-    @Query("SELECT * FROM tracks ORDER BY id DESC")
+    @Query("SELECT * FROM tracks ORDER BY timeOfAddition DESC")
     suspend fun getTracks(): List<TrackEntity>
 }

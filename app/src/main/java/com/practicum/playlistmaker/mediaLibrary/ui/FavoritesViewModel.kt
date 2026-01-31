@@ -18,8 +18,7 @@ class FavoritesViewModel(
 
     fun updateFavoriteTracks() {
         viewModelScope.launch {
-            favoriteTracksInteractor
-                .getFavoriteTracks()
+            favoriteTracksInteractor.getTracks()
                 .collect { tracks ->
                     stateLiveData.postValue(FavoritesState.Content(tracks))
                 }

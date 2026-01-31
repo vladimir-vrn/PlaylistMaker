@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker.player.ui
 
 import com.practicum.playlistmaker.common.domain.Track
+import com.practicum.playlistmaker.mediaLibrary.domain.PlayList
 
 sealed interface PlayerState {
 
@@ -13,6 +14,8 @@ sealed interface PlayerState {
         val updateIsFavourite: Boolean,
         val updateMediaPlayerState: Boolean,
         val updateProgressTime: Boolean,
+        val updatePlayLists: Boolean,
+        val playLists: List<PlayList>
     ) : PlayerState
 
     data class Error(

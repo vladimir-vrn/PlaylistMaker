@@ -5,9 +5,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface FavoriteTracksInteractor {
 
-    fun getFavoriteTracks(): Flow<List<Track>>
+    fun getTracks(): Flow<List<Track>>
 
-    fun findTrack(trackId: Long): Flow<List<Long>>
+    fun findTrack(trackId: Long): Flow<Boolean>
 
     suspend fun insertTrack(track: Track)
 

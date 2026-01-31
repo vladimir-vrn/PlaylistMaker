@@ -6,6 +6,7 @@ import com.practicum.playlistmaker.mediaLibrary.ui.MediaLibraryViewModel
 import com.practicum.playlistmaker.mediaLibrary.ui.PlaylistsViewModel
 import com.practicum.playlistmaker.player.ui.PlayerViewModel
 import com.practicum.playlistmaker.common.domain.Track
+import com.practicum.playlistmaker.mediaLibrary.ui.PlaylistViewModel
 import com.practicum.playlistmaker.search.ui.SearchViewModel
 import com.practicum.playlistmaker.settings.ui.SettingsViewModel
 import org.koin.android.ext.koin.androidContext
@@ -41,7 +42,8 @@ val viewModelModule = module {
             track,
             androidContext(),
             get(),
-            get()
+            get(),
+            get(),
         )
     }
 
@@ -50,6 +52,14 @@ val viewModelModule = module {
     }
 
     viewModel {
-        PlaylistsViewModel()
+        PlaylistsViewModel(
+            get()
+        )
+    }
+
+    viewModel {
+        PlaylistViewModel(
+            get()
+        )
     }
 }

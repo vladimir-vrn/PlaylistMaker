@@ -17,8 +17,12 @@ import com.practicum.playlistmaker.common.data.PrefsStorageClient
 import com.practicum.playlistmaker.settings.data.SettingsRepositoryImpl
 import com.practicum.playlistmaker.common.data.StorageClient
 import com.practicum.playlistmaker.common.data.db.AppDatabase
+import com.practicum.playlistmaker.common.data.db.PlaylistsDao
+import com.practicum.playlistmaker.common.data.db.TracksDao
 import com.practicum.playlistmaker.mediaLibrary.data.FavoriteTracksRepositoryImpl
+import com.practicum.playlistmaker.mediaLibrary.data.PlaylistsRepositoryImpl
 import com.practicum.playlistmaker.mediaLibrary.domain.FavoriteTracksRepository
+import com.practicum.playlistmaker.mediaLibrary.domain.PlaylistsRepository
 import com.practicum.playlistmaker.settings.domain.SettingsRepository
 import com.practicum.playlistmaker.settings.domain.ThemeSettings
 import com.practicum.playlistmaker.sharing.data.ExternalNavigatorImpl
@@ -119,7 +123,19 @@ val dataModule = module {
             .build()
     }
 
+    single<TracksDao> {
+        get<AppDatabase>().tracksDao()
+    }
+
+    single<PlaylistsDao> {
+        get<AppDatabase>().playlistsDao()
+    }
+
     single<FavoriteTracksRepository> {
         FavoriteTracksRepositoryImpl(get())
+    }
+
+    factory<PlaylistsRepository> {
+        PlaylistsRepositoryImpl(get())
     }
 }
