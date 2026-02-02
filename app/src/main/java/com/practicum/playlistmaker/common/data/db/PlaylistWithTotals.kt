@@ -1,9 +1,10 @@
 package com.practicum.playlistmaker.common.data.db
 
-data class PlaylistWithTracks(
-    val id: Int = 0,
+data class PlaylistWithTotals(
+    val id: Long,
     val name: String,
     val description: String,
     val pathCoverFile: String,
-    val trackId: Long,
+    val numTracks: Int,
+    val totalTime: Long,
 )

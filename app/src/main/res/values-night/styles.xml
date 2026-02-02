@@ -103,4 +103,7 @@
     <style name="BottomSheetText" parent="BottomSheetTextGeneral">
         <item name="android:textColor">@color/yp_white</item>
     </style>
+    <style name="PlayListDetailsMoreText" parent="PlayListDetailsMoreTextGeneral">
+        <item name="android:textColor">@color/yp_white</item>
+    </style>
 </resources>

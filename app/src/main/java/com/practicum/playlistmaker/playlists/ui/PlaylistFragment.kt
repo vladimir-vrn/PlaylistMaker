@@ -1,7 +1,8 @@
-package com.practicum.playlistmaker.mediaLibrary.ui
+package com.practicum.playlistmaker.playlists.ui
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.os.Build
 import com.practicum.playlistmaker.R
 import android.os.Bundle
 import android.text.Editable
@@ -25,19 +26,29 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.practicum.playlistmaker.common.data.dpToPx
-import com.practicum.playlistmaker.mediaLibrary.domain.PlayList
+import com.practicum.playlistmaker.playlists.domain.PlayList
 import com.practicum.playlistmaker.databinding.FragmentPlaylistBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class PlaylistFragment : Fragment() {
 
-    private val viewModel by viewModel<PlaylistViewModel>()
+    private val viewModel by viewModel<PlaylistViewModel> {
+        parametersOf(
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                requireArguments()
+                    .getParcelable(ARGS_PLAYLIST, PlayList::class.java)
+            else requireArguments()
+                .getParcelable(ARGS_PLAYLIST)
+        )
+    }
     private var _binding: FragmentPlaylistBinding? = null
     private val binding get() = _binding!!
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
     private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
     private lateinit var callbackOnBackPressed: OnBackPressedCallback
-    private var previousCoverUri = ""
+    private lateinit var playList: PlayList
+    private var previousPathCoverFile = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,10 +71,9 @@ class PlaylistFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun afterTextChanged(s: Editable) {
                 viewModel.updateData(
-                    PlaylistState.Content(
-                        binding.tieName.text.toString(),
-                        binding.tieDescription.text.toString(),
-                        previousCoverUri
+                    playList.copy(
+                        name = binding.tieName.text.toString(),
+                        description = binding.tieDescription.text.toString(),
                     )
                 )
             }
@@ -74,7 +84,8 @@ class PlaylistFragment : Fragment() {
 
         pickMedia = registerForActivityResult(
             ActivityResultContracts.PickVisualMedia()) { uri ->
-            if (uri != null) viewModel.displayImage(uri.toString())
+            if (uri != null)
+                viewModel.updateData(playList.copy(pathCoverFile = uri.toString()))
         }
         requestPermissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestPermission()
@@ -100,7 +111,7 @@ class PlaylistFragment : Fragment() {
             checkPossibilityClosing()
         }
         binding.btnCreatePlayList.setOnClickListener {
-            createPlayList()
+            savePlayList()
         }
 
         callbackOnBackPressed = object : OnBackPressedCallback(true) {
@@ -127,15 +138,16 @@ class PlaylistFragment : Fragment() {
         )
     }
 
-    private fun createPlayList() {
+    private fun savePlayList() {
 
         val newCoverUri =
-            if (previousCoverUri.isEmpty()) ""
-            else viewModel.copyCoverFile(
-                    previousCoverUri.toUri(),
+            if (playList.pathCoverFile != viewModel.initialPlayList.pathCoverFile)
+                viewModel.copyCoverFile(
+                    playList.pathCoverFile.toUri(),
                     getString(R.string.dir_playlist_covers),
                     requireContext()
-            )
+                )
+            else playList.pathCoverFile
 
         val msg = Snackbar.make(
             binding.root,
@@ -151,26 +163,19 @@ class PlaylistFragment : Fragment() {
             return
         }
 
-        val newPlaylist = PlayList(
-            0,
-            binding.tieName.text.toString(),
-            binding.tieDescription.text.toString(),
-            newCoverUri,
-            mutableListOf(),
-        )
-        viewModel.createPlayList(newPlaylist)
-        msg.show()
+        val newPlayList = playList.copy(pathCoverFile = newCoverUri)
+        viewModel.savePlayList(newPlayList)
+        if (viewModel.isNewPlayList) msg.show()
         setFragmentResult(
-            ADD_NEW_PLAYLIST_KEY,
-            bundleOf(ADD_NEW_PLAYLIST_DATA_KEY to newPlaylist)
+            PLAYLIST_KEY,
+            bundleOf((if (viewModel.isNewPlayList) ADD_NEW_PLAYLIST_DATA_KEY
+                    else UPDATE_PLAYLIST_DATA_KEY) to playList)
         )
         findNavController().navigateUp()
     }
 
     private fun checkPossibilityClosing() {
-        if (previousCoverUri.isNotEmpty() ||
-            !binding.tieName.text.isNullOrEmpty() ||
-            !binding.tieDescription.text.isNullOrEmpty()) {
+        if (playList != viewModel.initialPlayList && viewModel.isNewPlayList) {
 
             MaterialAlertDialogBuilder(
                     requireContext(),
@@ -186,6 +191,35 @@ class PlaylistFragment : Fragment() {
         else findNavController().navigateUp()
     }
 
+    private fun showPlayList() {
+
+        binding.btnCreatePlayList.isEnabled = playList.name.isNotEmpty()
+        if (playList.name != binding.tieName.text.toString()) {
+            binding.tieName.setText(playList.name)
+            binding.btnCreatePlayList.isEnabled = !binding.tieName.text.isNullOrEmpty()
+        }
+        if (playList.description != binding.tieDescription.text.toString())
+            binding.tieDescription.setText(playList.description)
+        if (playList.pathCoverFile.isEmpty()) {
+            binding.imgPlayListCover.setBackgroundResource(
+                R.drawable.shape_playlist_cover_placeholder
+            )
+        } else if (playList.pathCoverFile != previousPathCoverFile) {
+            Glide.with(binding.imgPlayListCover)
+                .load(playList.pathCoverFile)
+                .transform(
+                    CenterCrop(),
+                    RoundedCorners(
+                        dpToPx(8, requireContext())
+                    )
+                )
+                .into(binding.imgPlayListCover)
+            binding.imgPlayListCover.background = null
+            previousPathCoverFile = playList.pathCoverFile
+        }
+
+    }
+
     private fun showError(message: String) {
 
     }
@@ -193,30 +227,16 @@ class PlaylistFragment : Fragment() {
     private fun render(state: PlaylistState) {
         when (state) {
             is PlaylistState.Content -> {
-                binding.btnCreatePlayList.isEnabled = state.name.isNotEmpty()
-                if (state.name != binding.tieName.text.toString()) {
-                    binding.tieName.setText(state.name)
-                    binding.btnCreatePlayList.isEnabled = !binding.tieName.text.isNullOrEmpty()
-                }
-                if (state.description != binding.tieDescription.text.toString())
-                    binding.tieDescription.setText(state.description)
-                if (state.coverUri.isEmpty()) {
-                    binding.imgPlayListCover.setBackgroundResource(
-                        R.drawable.shape_playlist_cover_placeholder
-                    )
-                } else if (state.coverUri != previousCoverUri) {
-                    Glide.with(binding.imgPlayListCover)
-                        .load(state.coverUri)
-                        .transform(
-                            CenterCrop(),
-                            RoundedCorners(
-                                dpToPx(8, requireContext())
-                            )
-                        )
-                        .into(binding.imgPlayListCover)
-                    binding.imgPlayListCover.background = null
-                    previousCoverUri = state.coverUri
-                }
+                playList = state.playList
+                showPlayList()
+                binding.tbPlayList.title = getString(
+                    if (viewModel.isNewPlayList) R.string.playlists_new
+                    else R.string.playlists_edit
+                )
+                binding.btnCreatePlayList.text = getString(
+                    if (viewModel.isNewPlayList) R.string.playlist_create_btn
+                    else R.string.playlist_create_btn_edit
+                )
             }
             is PlaylistState.Error -> showError(state.message)
         }
@@ -224,7 +244,10 @@ class PlaylistFragment : Fragment() {
 
     companion object {
 
-        const val ADD_NEW_PLAYLIST_KEY = "ADD_NEW_PLAYLIST_KEY"
+        const val PLAYLIST_KEY = "PLAYLIST_KEY"
         const val ADD_NEW_PLAYLIST_DATA_KEY = "ADD_NEW_PLAYLIST_DATA_KEY"
+        const val UPDATE_PLAYLIST_DATA_KEY = "UPDATE_PLAYLIST_DATA_KEY"
+        const val ARGS_PLAYLIST = "ARGS_PLAYLIST"
+        fun createArgs(playList: PlayList?) = Bundle().apply { putParcelable(ARGS_PLAYLIST, playList) }
     }
 }

@@ -5,5 +5,5 @@
     <solid android:color="@color/yp_light_gray" />
 
     <corners
-        android:radius="@dimen/standard_indentation"/>
+        android:radius="44dp"/>
 </shape>

@@ -1,10 +1,10 @@
-package com.practicum.playlistmaker.mediaLibrary.ui
+package com.practicum.playlistmaker.playlists.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.practicum.playlistmaker.mediaLibrary.domain.PlaylistsInteractor
+import com.practicum.playlistmaker.playlists.domain.PlaylistsInteractor
 import kotlinx.coroutines.launch
 
 class PlaylistsViewModel(

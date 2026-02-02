@@ -23,6 +23,10 @@ class SharingInteractorImpl(
         )
     }
 
+    override fun shareData(data: String) {
+        externalNavigator.shareData(data)
+    }
+
     companion object {
         private const val INTENT_SHARE_APP = "intent_share_app"
         private const val USER_AGREEMENT_WEBSITE = "user_agreement_website"

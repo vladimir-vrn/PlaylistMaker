@@ -6,9 +6,10 @@ import androidx.room.RoomDatabase
 @Database(
     version = 1,
     entities = [
-        TrackEntity::class,
+        FavoriteTrackEntity::class,
         PlaylistEntity::class,
         PlaylistContentEntity::class,
+        TrackEntity::class,
     ]
 )
 abstract class AppDatabase : RoomDatabase(){

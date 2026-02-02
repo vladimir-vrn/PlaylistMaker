@@ -18,9 +18,9 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlayerBinding
 import com.practicum.playlistmaker.common.domain.Track
 import com.practicum.playlistmaker.common.data.dpToPx
-import com.practicum.playlistmaker.mediaLibrary.domain.PlayList
-import com.practicum.playlistmaker.mediaLibrary.ui.PlayListsAdapter
-import com.practicum.playlistmaker.mediaLibrary.ui.PlaylistFragment
+import com.practicum.playlistmaker.playlists.domain.PlayList
+import com.practicum.playlistmaker.playlists.ui.PlayListsAdapter
+import com.practicum.playlistmaker.playlists.ui.PlaylistFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -40,6 +40,10 @@ class PlayerFragment : Fragment() {
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
     private lateinit var callbackOnBackPressed: OnBackPressedCallback
     private lateinit var adapter: PlayListsAdapter
+
+    fun interface OnChoosingPlaylist {
+        fun onItemClick(isFoundTrack: Boolean)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,7 +103,10 @@ class PlayerFragment : Fragment() {
         }
         binding.includedBottomSheet.recyclerViewBottomSheet.adapter = adapter
         binding.includedBottomSheet.btnNewPlaylistBottomSheet.setOnClickListener {
-            findNavController().navigate(R.id.action_playerFragment_to_playlistFragment)
+            findNavController().navigate(
+                R.id.action_playerFragment_to_playlistFragment,
+                PlaylistFragment.createArgs(null)
+            )
         }
     }
 
@@ -128,24 +135,21 @@ class PlayerFragment : Fragment() {
 
     private fun choosingPlaylist(playList: PlayList) {
 
-        val track = viewModel.getCurTrack()
-        val isFoundTrack = playList.trackIDs.contains(track.trackId)
-        val textMsg = getString(
-            if (isFoundTrack) R.string.player_track_was_found_in_playlist
-            else R.string.player_track_added_to_playlist
-        ).format(playList.name)
+        viewModel.findTrackOnPlayList(playList.id) { isFoundTrack ->
 
-        Toast.makeText(
-            requireContext(),
-            textMsg,
-            Toast.LENGTH_SHORT
-        ).show()
+            val textMsg = getString(
+                if (isFoundTrack) R.string.player_track_was_found_in_playlist
+                else R.string.player_track_added_to_playlist
+            ).format(playList.name)
 
-        if (!isFoundTrack) {
-            viewModel.insertTrackToPlaylist(track, playList.id)
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            Toast.makeText(
+                requireContext(),
+                textMsg,
+                Toast.LENGTH_SHORT
+            ).show()
+
+            if (!isFoundTrack) bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         }
-
     }
 
     private fun showTrackData(track: Track) {
@@ -194,7 +198,7 @@ class PlayerFragment : Fragment() {
     private fun setFragmentResultListener() {
 
         parentFragmentManager.setFragmentResultListener(
-            PlaylistFragment.ADD_NEW_PLAYLIST_KEY,
+            PlaylistFragment.PLAYLIST_KEY,
             this
         ) { requestKey, bundle ->
             val newPlayList = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)

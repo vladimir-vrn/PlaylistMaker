@@ -1,7 +1,7 @@
 package com.practicum.playlistmaker.player.ui
 
 import com.practicum.playlistmaker.common.domain.Track
-import com.practicum.playlistmaker.mediaLibrary.domain.PlayList
+import com.practicum.playlistmaker.playlists.domain.PlayList
 
 sealed interface PlayerState {
 

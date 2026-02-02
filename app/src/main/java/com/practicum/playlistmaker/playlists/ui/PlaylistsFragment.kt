@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.mediaLibrary.ui
+package com.practicum.playlistmaker.playlists.ui
 
 import android.os.Build
 import android.os.Bundle
@@ -10,9 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.mediaLibrary.domain.PlayList
+import com.practicum.playlistmaker.playlists.domain.PlayList
 import com.practicum.playlistmaker.common.ui.RootActivity
 import com.practicum.playlistmaker.databinding.FragmentPlaylistsBinding
+import com.practicum.playlistmaker.mediaLibrary.ui.MediaLibraryFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.text.format
 
@@ -46,13 +47,21 @@ class PlaylistsFragment : Fragment() {
         }
 
         binding.btnNewPlaylist.setOnClickListener {
-            findNavController().navigate(R.id.action_mediaLibraryFragment_to_playlistFragment)
+            findNavController().navigate(
+                R.id.action_mediaLibraryFragment_to_playlistFragment,
+                PlaylistFragment.createArgs(null)
+            )
         }
 
         adapter = PlayListsAdapter(
             PlayListsAdapter.LAYOUT_OPTION_GRID,
             PlayListsAdapter.determineDeclensionTracks(requireContext())
-        ) { position -> }
+        ) { position ->
+            findNavController().navigate(
+                R.id.action_mediaLibraryFragment_to_playlistDetailsFragment,
+                PlaylistDetailsFragment.createArgs(adapter.playLists[position])
+            )
+        }
         binding.recyclerViewPlaylists.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.recyclerViewPlaylists.adapter = adapter
 
@@ -96,7 +105,7 @@ class PlaylistsFragment : Fragment() {
     private fun setFragmentResultListener() {
 
         parentFragment?.parentFragmentManager?.setFragmentResultListener(
-            PlaylistFragment.ADD_NEW_PLAYLIST_KEY,
+            PlaylistFragment.PLAYLIST_KEY,
             this
         ) { requestKey, bundle ->
             newPlayList = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)

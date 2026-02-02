@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/playlistDetails"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/yp_light_gray"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imgPlayListDetailsCover"
+            style="@style/PlayListDetailsCover"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <com.google.android.material.appbar.MaterialToolbar
+            style="@style/PlayListDetailsToolbar"
+            android:id="@+id/tbPlayListDetails"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            style="@style/PlayListDetailsText"
+            android:id="@+id/txtNamePlayListDetails"
+            android:fontFamily="@font/ys_display_bold"
+            android:textSize="24sp"
+            android:layout_marginTop="@dimen/big_indentation"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imgPlayListDetailsCover"
+            tools:text="Нилетто"/>
+
+        <TextView
+            style="@style/PlayListDetailsText"
+            android:id="@+id/txtDescriptionPlayListDetails"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtNamePlayListDetails"
+            tools:text="2023"/>
+
+        <TextView
+            style="@style/PlayListDetailsText"
+            android:id="@+id/txtTimePlayListDetails"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtDescriptionPlayListDetails"
+            tools:text="305 минут • 81 трек"/>
+
+        <ImageView
+            style="@style/PlayListDetailsIc"
+            android:id="@+id/imgSharePlayListDetails"
+            android:src="@drawable/ic_share"
+            app:tint="@color/yp_black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtTimePlayListDetails"/>
+
+        <ImageView
+            style="@style/PlayListDetailsIc"
+            android:id="@+id/imgMorePlayListDetails"
+            android:src="@drawable/ic_more"
+            app:layout_constraintStart_toEndOf="@id/imgSharePlayListDetails"
+            app:layout_constraintTop_toBottomOf="@id/txtTimePlayListDetails"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/overlayPlayListDetails"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/yp_background"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/includedBottomSheetPlayList"
+        layout="@layout/bottom_sheet_playlist"
+        android:visibility="visible" />
+
+    <include
+        android:id="@+id/includedBottomSheetPlayListMore"
+        layout="@layout/bottom_sheet_playlist_more"
+        android:visibility="visible" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

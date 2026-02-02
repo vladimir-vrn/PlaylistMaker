@@ -35,13 +35,18 @@
     <string name="favorites_missing">Ваша медиатека пуста</string>
     <string name="playlists_missing">Вы не создали\n ни одного плейлиста</string>
     <string name="playlists_new">Новый плейлист</string>
+    <string name="playlists_edit">Редактировать</string>
     <string name="playlists_add">Добавить в плейлист</string>
     <string name="playlists_track_nominative_singular">%s трек</string>
     <string name="playlists_track_genitive_plural">%s треков</string>
     <string name="playlists_track_genitive_singular">%s трека</string>
+    <string name="playlists_minute_nominative_singular">%s минута</string>
+    <string name="playlists_minute_genitive_plural">%s минут</string>
+    <string name="playlists_minute_genitive_singular">%s минуты</string>
     <string name="media_library_tab_favorite_tracks">Избранные треки</string>
     <string name="media_library_tab_playlists">Плейлисты</string>
     <string name="playlist_create_btn">Создать</string>
+    <string name="playlist_create_btn_edit">Сохранить</string>
     <string name="playlist_name_txt">Название*</string>
     <string name="playlist_description_txt">Описание</string>
     <string name="playlist_dialog_title">Завершить создание плейлиста?</string>
@@ -52,4 +57,13 @@
     <string name="playlist_was_created_successfully">Плейлист %s создан</string>
     <string name="playlist_could_not_place_cover_in_vault">Не удалось поместить обложку в хранилище. Необходимо выбрать другое изображение</string>
     <string name="dir_playlist_covers">playlist_covers</string>
+    <string name="playlist_details_totals">%s • %s</string>
+    <string name="playlist_details_more_share">Поделиться</string>
+    <string name="playlist_details_more_edit">Редактировать информацию</string>
+    <string name="playlist_details_more_delete">Удалить плейлист</string>
+    <string name="playlist_details_track_delete">Хотите удалить трек?</string>
+    <string name="playlist_details_playlist_delete">Хотите удалить плейлист «%s»?</string>
+    <string name="playlist_details_dialog_negative_btn">Нет</string>
+    <string name="playlist_details_dialog_indent">\n\n</string>
+    <string name="playlist_details_dialog_positive_btn">Да</string>
 </resources>

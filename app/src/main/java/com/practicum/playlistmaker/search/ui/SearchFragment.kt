@@ -52,12 +52,14 @@ class SearchFragment : Fragment() {
             )
         }
 
-        adapter = TracksAdapter { position ->
-            findNavController().navigate(
-                R.id.action_searchFragment_to_playerFragment,
-                PlayerFragment.createArgs(adapter.tracks[position])
-            )
-            viewModel.updateHistory(adapter.tracks[position])
+        adapter = TracksAdapter { position, longPress ->
+            if (!longPress) {
+                findNavController().navigate(
+                    R.id.action_searchFragment_to_playerFragment,
+                    PlayerFragment.createArgs(adapter.tracks[position])
+                )
+                viewModel.updateHistory(adapter.tracks[position])
+            }
         }
         binding.recyclerView.adapter = adapter
 
