@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.playlists.data
 
+import android.util.Log
 import com.practicum.playlistmaker.common.data.db.PlaylistContentEntity
 import com.practicum.playlistmaker.common.data.db.PlaylistEntity
 import com.practicum.playlistmaker.common.data.db.PlaylistsDao
@@ -29,15 +30,10 @@ class PlaylistsRepositoryImpl(
 
     override suspend fun deletePlayList(playListId: Long) {
         playlistsDao.deletePlayList(playListId)
-        val tracks = playlistsDao.getPlaylistTracks(playListId)
+    }
+
+    override suspend fun deletePlayListContent(playListId: Long) {
         playlistsDao.deletePlayListContent(playListId)
-        val tracksWithoutPlaylists = playlistsDao.getTracksWithoutPlaylists(
-            tracks.map { it.trackId }
-        )
-        val favoriteTracks = tracksDao.findFavoriteTracks(tracksWithoutPlaylists)
-        tracksDao.deleteTracks(
-            tracksWithoutPlaylists.filter { !favoriteTracks.contains(it) }
-        )
     }
 
     override fun getPlaylists(): Flow<List<PlayList>> = flow {
@@ -103,5 +99,9 @@ class PlaylistsRepositoryImpl(
         if (playlistsDao.getTracksWithoutPlaylists(listOf(trackId)).isNotEmpty())
             if (tracksDao.findFavoriteTracks(listOf(trackId)).isEmpty())
                 tracksDao.deleteTracks(listOf(trackId))
+    }
+
+    override suspend fun deleteTracksWithoutPlaylists(playListId: Long) {
+        playlistsDao.deleteTracksWithoutPlaylists(playListId)
     }
 }

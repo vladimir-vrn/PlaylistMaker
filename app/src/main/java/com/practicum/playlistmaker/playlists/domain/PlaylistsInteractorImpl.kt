@@ -23,11 +23,19 @@ class PlaylistsInteractorImpl(
         repository.deletePlayList(playListId)
     }
 
+    override suspend fun deletePlayListContent(playListId: Long) {
+        repository.deletePlayListContent(playListId)
+    }
+
     override suspend fun insertTrack(track: Track, playListId: Long) {
         repository.insertTrack(track, playListId)
     }
 
     override suspend fun deleteTrack(trackId: Long, playListId: Long) {
         repository.deleteTrack(trackId, playListId)
+    }
+
+    override suspend fun deleteTracksWithoutPlaylists(playListId: Long) {
+        repository.deleteTracksWithoutPlaylists(playListId)
     }
 }

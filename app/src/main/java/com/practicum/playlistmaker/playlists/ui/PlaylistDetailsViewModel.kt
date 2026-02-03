@@ -11,6 +11,7 @@ import com.practicum.playlistmaker.playlists.domain.PlaylistsInteractor
 import com.practicum.playlistmaker.sharing.domain.SharingInteractor
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class PlaylistDetailsViewModel(
     playList: PlayList,
@@ -42,11 +43,18 @@ class PlaylistDetailsViewModel(
     }
 
     fun deletePlayList() {
-        viewModelScope.launch {
-            playlistsInteractor.deletePlayList(
-                (stateLiveData.value as PlaylistDetailsState.Content).playList.id
-            )
+
+        val playListId = (stateLiveData.value as PlaylistDetailsState.Content).playList.id
+        runBlocking {
+            playlistsInteractor.deleteTracksWithoutPlaylists(playListId)
         }
+        viewModelScope.launch {
+            playlistsInteractor.deletePlayList(playListId)
+        }
+        viewModelScope.launch {
+            playlistsInteractor.deletePlayListContent(playListId)
+        }
+
     }
     fun deleteTrackFromPlayList(track: Track) {
 

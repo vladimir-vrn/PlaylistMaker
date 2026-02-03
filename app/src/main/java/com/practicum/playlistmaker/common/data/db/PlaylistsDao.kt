@@ -41,11 +41,20 @@ interface PlaylistsDao {
             "FROM playlistContent " +
             "LEFT JOIN tracks ON playlistContent.trackId = tracks.trackId " +
             "WHERE playlistContent.playListId = :playlistId " +
-            "ORDER BY tracks.name")
+            "ORDER BY playlistContent.id DESC")
     suspend fun getPlaylistTracks(playlistId: Long): List<TrackEntity>
 
     @Query("SELECT tracks.trackId FROM tracks " +
             "LEFT JOIN playlistContent ON tracks.trackId = playlistContent.trackId " +
             "WHERE tracks.trackId IN (:trackIds) AND playlistContent.playListId IS NULL")
     suspend fun getTracksWithoutPlaylists(trackIds: List<Long>): List<Long>
+
+    @Query("DELETE FROM tracks WHERE trackId IN (" +
+            "SELECT playlistContent.trackId AS trackId " +
+            "FROM playlistContent " +
+            "LEFT JOIN favoriteTracks ON playlistContent.trackId =  favoriteTracks.trackId " +
+            "LEFT JOIN playlistContent AS trackPlaylists ON " +
+                "playlistContent.trackId = trackPlaylists.trackId AND trackPlaylists.playListId != :playlistId " +
+            "WHERE playlistContent.playListId = :playlistId AND favoriteTracks.trackId IS NULL AND trackPlaylists.playListId IS NULL)")
+    suspend fun deleteTracksWithoutPlaylists(playlistId: Long)
 }
