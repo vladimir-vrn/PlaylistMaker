@@ -10,7 +10,7 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.common.domain.Track
 import com.practicum.playlistmaker.common.data.timeFormatMmSs
 import com.practicum.playlistmaker.mediaLibrary.domain.FavoriteTracksInteractor
-import com.practicum.playlistmaker.mediaLibrary.domain.PlaylistsInteractor
+import com.practicum.playlistmaker.playlists.domain.PlaylistsInteractor
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.single
@@ -169,19 +169,24 @@ class PlayerViewModel(
         }
     }
 
-    fun insertTrackToPlaylist(track: Track, playListId: Int) {
-        viewModelScope.launch {
-            playlistsInteractor.insertTrack(track, playListId)
-            stateLiveData.postValue(
-                (stateLiveData.value as PlayerState.Content).copy(
-                    playLists = playlistsInteractor.getPlaylists().single(),
+    fun findTrackOnPlayList(
+        playListId: Long,
+        callback: PlayerFragment.OnChoosingPlaylist
+    ) {
+        if (stateLiveData.value is PlayerState.Content) {
+            viewModelScope.launch {
+                val isFoundTrack = playlistsInteractor.getPlaylistTracks(playListId)
+                    .single().contains(track)
+                if (!isFoundTrack)
+                    playlistsInteractor.insertTrack(track, playListId)
+                callback.onItemClick(isFoundTrack)
+                stateLiveData.postValue(
+                    (stateLiveData.value as PlayerState.Content).copy(
+                        playLists = playlistsInteractor.getPlaylists().single(),
+                    )
                 )
-            )
+            }
         }
-    }
-
-    fun getCurTrack(): Track {
-        return (stateLiveData.value as PlayerState.Content).track
     }
 
     companion object {

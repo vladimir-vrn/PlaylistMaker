@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".mediaLibrary.ui.PlaylistsFragment">
+    tools:context=".playlists.ui.PlaylistsFragment">
 
     <Button
         style="@style/PlaylistsBtn"
@@ -37,9 +37,9 @@
     <Button
         android:id="@+id/btnPlaylistCreated"
         style="@style/PlaylistsBtnPlaylistCreated"
+        android:enabled="false"
         android:text="@string/playlist_was_created_successfully"
         android:visibility="gone"
-        android:enabled="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -22,6 +22,7 @@ class TracksRepositoryImpl(
                     it.trackName,
                     it.artistName,
                     timeFormatMmSs(it.trackTimeMillis),
+                    it.trackTimeMillis,
                     it.artworkUrl100,
                     it.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"),
                     it.collectionName,

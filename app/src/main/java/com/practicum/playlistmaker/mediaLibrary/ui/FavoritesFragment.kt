@@ -37,8 +37,8 @@ class FavoritesFragment : Fragment() {
             render(it)
         }
 
-        adapter = TracksAdapter { position ->
-            findNavController().navigate(
+        adapter = TracksAdapter { position, longPress ->
+            if (!longPress) findNavController().navigate(
                 R.id.action_mediaLibraryFragment_to_playerFragment,
                 PlayerFragment.createArgs(adapter.tracks[position])
             )

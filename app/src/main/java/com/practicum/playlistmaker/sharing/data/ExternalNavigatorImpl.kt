@@ -59,6 +59,22 @@ class ExternalNavigatorImpl(
         context.startActivity(intent)
     }
 
+    override fun shareData(data: String) {
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.setType("text/plain")
+        intent.putExtra(
+            Intent.EXTRA_TEXT,
+            data
+        )
+
+        context.startActivity(
+            Intent.createChooser(
+                intent,
+                ""
+            )
+        )
+    }
+
     @SuppressLint("DiscouragedApi")
     private fun getStringResourceByName(resourceName: String): String {
 

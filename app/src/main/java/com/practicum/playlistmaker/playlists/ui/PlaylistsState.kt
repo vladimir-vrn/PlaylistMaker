@@ -1,6 +1,6 @@
-package com.practicum.playlistmaker.mediaLibrary.ui
+package com.practicum.playlistmaker.playlists.ui
 
-import com.practicum.playlistmaker.mediaLibrary.domain.PlayList
+import com.practicum.playlistmaker.playlists.domain.PlayList
 
 sealed interface PlaylistsState {
 

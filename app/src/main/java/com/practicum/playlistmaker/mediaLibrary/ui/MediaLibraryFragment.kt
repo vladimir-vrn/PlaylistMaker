@@ -11,6 +11,7 @@ import androidx.fragment.app.setFragmentResult
 import com.google.android.material.tabs.TabLayout
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentMediaLibraryBinding
+import com.practicum.playlistmaker.playlists.ui.PlaylistsFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MediaLibraryFragment : Fragment() {

@@ -16,5 +16,5 @@ data class PlaylistContentEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
     val trackId: Long,
-    val playListId: Int,
+    val playListId: Long,
 )

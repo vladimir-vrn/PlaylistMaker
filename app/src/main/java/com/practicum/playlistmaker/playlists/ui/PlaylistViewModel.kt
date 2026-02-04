@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.mediaLibrary.ui
+package com.practicum.playlistmaker.playlists.ui
 
 import android.content.Context
 import android.net.Uri
@@ -7,24 +7,36 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.practicum.playlistmaker.mediaLibrary.domain.PlayList
-import com.practicum.playlistmaker.mediaLibrary.domain.PlaylistsInteractor
+import com.practicum.playlistmaker.playlists.domain.PlayList
+import com.practicum.playlistmaker.playlists.domain.PlaylistsInteractor
 import kotlinx.coroutines.launch
 import java.io.File
 
 class PlaylistViewModel(
+    playList: PlayList?,
     private val playlistsInteractor: PlaylistsInteractor
 ) : ViewModel() {
     private val stateLiveData = MutableLiveData<PlaylistState>(
-        PlaylistState.Content()
+        PlaylistState.Content(
+            playList?.copy() ?:
+                PlayList(
+                    System.currentTimeMillis(),
+                    "",
+                    "",
+                    "",
+                    0,
+                    0,
+                )
+        )
     )
     fun observeState(): LiveData<PlaylistState> = stateLiveData
+    val initialPlayList = (stateLiveData.value as PlaylistState.Content).playList
 
-    fun displayImage(uri: String) {
+    val isNewPlayList = playList == null
+
+    fun updateData(playList: PlayList) {
         stateLiveData.postValue(
-            (stateLiveData.value as PlaylistState.Content).copy(
-                coverUri = uri
-            )
+            PlaylistState.Content(playList)
         )
     }
 
@@ -52,16 +64,7 @@ class PlaylistViewModel(
         }
     }
 
-    fun updateData(data: PlaylistState.Content) {
-        stateLiveData.postValue(
-            (stateLiveData.value as PlaylistState.Content).copy(
-                name = data.name,
-                description = data.description
-            )
-        )
-    }
-
-    fun createPlayList(playList: PlayList) {
+    fun savePlayList(playList: PlayList) {
         viewModelScope.launch {
             playlistsInteractor.insertPlayList(playList)
         }

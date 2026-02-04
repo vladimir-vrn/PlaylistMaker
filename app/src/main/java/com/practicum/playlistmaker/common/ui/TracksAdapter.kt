@@ -10,7 +10,7 @@ class TracksAdapter(
 
     var tracks = mutableListOf<Track>()
     fun interface OnItemClickListener {
-        fun onItemClick(position: Int)
+        fun onItemClick(position: Int, longPress: Boolean)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TracksViewHolder = TracksViewHolder.from(parent)
@@ -18,7 +18,11 @@ class TracksAdapter(
     override fun onBindViewHolder(holder: TracksViewHolder, position: Int) {
         holder.bind(tracks[position])
         holder.itemView.setOnClickListener {
-            onItemClickListener.onItemClick(position)
+            onItemClickListener.onItemClick(position, false)
+        }
+        holder.itemView.setOnLongClickListener {
+            onItemClickListener.onItemClick(position, true)
+            true
         }
     }
 
